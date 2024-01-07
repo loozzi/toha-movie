@@ -4,6 +4,8 @@ const express = require('express')
 const cors = require('cors')
 const morgan = require('morgan')
 
+const connector = require('./connect/connect')
+
 const app = express()
 
 app.use(bodyParser.json())
@@ -16,6 +18,15 @@ app.use(cors({
 	methods: ['GET', 'POST', 'PUT', 'DELETE'],
 }))
 
+// Connect to database
+connector.connect((err) => {
+	if (err) {
+		console.log(err)
+		throw err
+	} else {
+		console.log('Database connected')
+	}
+})
 
 // Default route
 app.use('/', (req, res) => {
