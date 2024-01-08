@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken')
 const query = require('../connect/query')
-const repoToken = require('../repositories/token.repository')
+const tokenRepo = require('../repositories/token.repository')
 
 const JWT_SECRET = process.env.JWT_SECRET
 const time_expires = '1d'
@@ -25,9 +25,9 @@ const generate = async (user) => {
 
 	// await query(`delete from users_tokens where user_id = ${user.id}`)
 	// await query(`insert into users_tokens (user_id, refresh_token) values (${user.id}, '${refreshToken}')`)
-	// await repoToken.delete(user.id)
-	// await repoToken.create(user.id, refreshToken)
-	await repoToken.update(user.id, refreshToken)
+	// await tokenRepo.delete(user.id)
+	// await tokenRepo.create(user.id, refreshToken)
+	await tokenRepo.update(user.id, refreshToken)
 
 	return Promise.resolve({ accessToken, refreshToken })
 }
