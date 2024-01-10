@@ -66,8 +66,6 @@
 
 #### Run Client
 	Updating...
-### 📃 Postman API
-<a href="https://api.postman.com/collections/20770832-2bc967d7-98ba-49f8-93a1-340e10671c25?access_key=PMAT-01HE8921NF17BMJVZ4RG1YEN7C">Export Postman here</a>
 
 ## 🤝 Contact
 Nguyen Quang Thao - <a href="https://www.facebook.com/NQT.Loozzii/">Facebok</a> - <a href="mail:thaonq.dev+github@gmail.com">Email</a>
