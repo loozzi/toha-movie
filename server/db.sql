@@ -30,7 +30,7 @@ create table if not exists verifications (
 	is_deleted boolean default false,
 
 	primary key (user_id),
-	foreign key (user_id) references users(id)
+	foreign key (user_id) references users(id) on delete restrict on update cascade
 );
 
 drop table if exists roles;
@@ -55,8 +55,8 @@ create table if not exists users_roles (
 	modified timestamp default current_timestamp,
 	is_deleted boolean default false,
 
-	foreign key (user_id) references users(id),
-	foreign key (role_id) references roles(id)
+	foreign key (user_id) references users(id) on delete restrict on update cascade,
+	foreign key (role_id) references roles(id) on delete restrict on update cascade
 );
 
 drop table if exists token_users;
@@ -69,7 +69,7 @@ create table if not exists token_users (
 	is_deleted boolean default false,
 
 	primary key (user_id),
-	foreign key (user_id) references users(id)
+	foreign key (user_id) references users(id) on delete restrict on update cascade
 );
 
 drop table if exists movies;
@@ -86,7 +86,7 @@ create table if not exists movies(
 	time varchar(255) not null default '',
 	episode_current varchar(255) default '',
 	episode_total varchar(255) default '',
-	qualitiy varchar(25) default 'HD',
+	quality varchar(25) default 'HD',
 	lang varchar(255) default '',
 	nofity varchar(255) default '',
 	showtimes varchar(255) default '',
@@ -114,8 +114,8 @@ create table if not exists users_movies(
 	is_deleted boolean default false,
 
 	primary key(id),
-	foreign key (user_id) references users(id),
-	foreign key (movie_id) references movies(id)
+	foreign key (user_id) references users(id) on delete restrict on update cascade,
+	foreign key (movie_id) references movies(id) on delete restrict on update cascade
 );
 
 drop table if exists comments;
@@ -130,8 +130,8 @@ create table if not exists comments(
 	is_deleted boolean default false,
 
 	primary key(id),
-	foreign key (user_id) references users(id),
-	foreign key (movie_id) references movies(id)
+	foreign key (user_id) references users(id) on delete restrict on update cascade,
+	foreign key (movie_id) references movies(id) on delete restrict on update cascade
 );
 
 drop table if exists rates;
@@ -144,8 +144,8 @@ create table if not exists rates(
 	modified timestamp default current_timestamp,
 	is_deleted boolean default false,
 
-	foreign key (user_id) references users(id),
-	foreign key (movie_id) references movies(id)
+	foreign key (user_id) references users(id) on delete restrict on update cascade,
+	foreign key (movie_id) references movies(id) on delete restrict on update cascade
 );
 
 drop table if exists actors;
@@ -170,8 +170,8 @@ create table if not exists movies_actors(
 	modified timestamp default current_timestamp,
 	is_deleted boolean default false,
 
-	foreign key (movie_id) references movies(id),
-	foreign key (actor_id) references actors(id)
+	foreign key (movie_id) references movies(id) on delete restrict on update cascade,
+	foreign key (actor_id) references actors(id) on delete restrict on update cascade
 );
 
 drop table if exists directors;
@@ -196,8 +196,8 @@ create table if not exists movies_directors(
 	modified timestamp default current_timestamp,
 	is_deleted boolean default false,
 
-	foreign key (movie_id) references movies(id),
-	foreign key (director_id) references directors(id)
+	foreign key (movie_id) references movies(id) on delete restrict on update cascade,
+	foreign key (director_id) references directors(id) on delete restrict on update cascade
 );
 
 drop table if exists categories;
@@ -222,8 +222,8 @@ create table if not exists movies_categories(
 	modified timestamp default current_timestamp,
 	is_deleted boolean default false,
 
-	foreign key (movie_id) references movies(id),
-	foreign key (category_id) references categories(id)
+	foreign key (movie_id) references movies(id) on delete restrict on update cascade,
+	foreign key (category_id) references categories(id) on delete restrict on update cascade
 );
 
 drop table if exists countries;
@@ -248,36 +248,24 @@ create table if not exists movies_countries(
 	modified timestamp default current_timestamp,
 	is_deleted boolean default false,
 
-	foreign key (movie_id) references movies(id),
-	foreign key (country_id) references countries(id)
+	foreign key (movie_id) references movies(id) on delete restrict on update cascade,
+	foreign key (country_id) references countries(id) on delete restrict on update cascade
 );
 
 drop table if exists servers;
 create table if not exists servers(
 	id int not null auto_increment,
 	name varchar(255) not null,
-
-	created timestamp default current_timestamp,
-	modified timestamp default current_timestamp,
-	is_deleted boolean default false,
-
-	primary key (id)
-);
-
-drop table if exists movies_servers;
-create table if not exists movies_servers(
-	id int not null auto_increment,
 	movie_id int not null,
-	server_id int not null,
 
 	created timestamp default current_timestamp,
 	modified timestamp default current_timestamp,
 	is_deleted boolean default false,
 
 	primary key (id),
-	foreign key (movie_id) references movies(id),
-	foreign key (server_id) references servers(id)
+	foreign key (movie_id) references movies(id) on delete restrict on update cascade
 );
+
 
 drop table if exists episodes;
 create table if not exists episodes(
@@ -292,7 +280,7 @@ create table if not exists episodes(
 	modified timestamp default current_timestamp,
 	is_deleted boolean default false,
 
-	foreign key (server_id) references servers(id)
+	foreign key (server_id) references servers(id) on delete restrict on update cascade
 );
 
 drop table if exists rooms;
@@ -312,8 +300,8 @@ create table if not exists rooms(
 	is_deleted boolean default false,
 
 	primary key (id),
-	foreign key (host_id) references users(id),
-	foreign key (movie_id) references movies(id)
+	foreign key (host_id) references users(id) on delete restrict on update cascade,
+	foreign key (movie_id) references movies(id) on delete restrict on update cascade
 );
 
 drop table if exists users_rooms;
@@ -325,8 +313,8 @@ create table if not exists users_rooms(
 	modified timestamp default current_timestamp,
 	is_deleted boolean default false,
 
-	foreign key (user_id) references users(id),
-	foreign key (room_id) references rooms(id)
+	foreign key (user_id) references users(id) on delete restrict on update cascade,
+	foreign key (room_id) references rooms(id) on delete restrict on update cascade
 );
 
 drop table if exists messages;
@@ -341,8 +329,8 @@ create table if not exists messages(
 	is_deleted boolean default false,
 
 	primary key (id),
-	foreign key (user_id) references users(id),
-	foreign key (room_id) references rooms(id)
+	foreign key (user_id) references users(id) on delete restrict on update cascade,
+	foreign key (room_id) references rooms(id) on delete restrict on update cascade
 );
 
 drop table if exists histories;
@@ -355,6 +343,6 @@ create table if not exists histories(
 	modified timestamp default current_timestamp,
 	is_deleted boolean default false,
 
-	foreign key (user_id) references users(id),
-	foreign key (movie_id) references movies(id)
+	foreign key (user_id) references users(id) on delete restrict on update cascade,
+	foreign key (movie_id) references movies(id) on delete restrict on update cascade
 );
