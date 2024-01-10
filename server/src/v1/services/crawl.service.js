@@ -192,7 +192,55 @@ const getUpdate = async () => {
 	} catch (err) {
 		return {
 			status: 500,
-			message: "Internal Server Error"
+			message: "Internal Server Error",
+			error: err
+		}
+	}
+}
+
+const getListUpdate = async () => {
+	try {
+		let curPage = 1;
+		const movieLastModifed = await movieRepo.findLastModifed()
+		const timeLastModifed = movieLastModifed.modified
+		const result = []
+
+		while (true) {
+			const apiPage = `https://ophim1.com/danh-sach/phim-moi-cap-nhat?page=${curPage}`
+			const resp = (await axios.get(apiPage)).data
+			if (resp.status) {
+				const pagination = resp.pagination
+				const movies = resp.items
+				const pathImg = resp.pathImage
+				console.log("Page: ", curPage)
+				for (let movie of movies) {
+					const slug = movie.slug
+					const movieDb = await movieRepo.findOneBySlug(slug)
+					if (compareDate(movieDb.modified, movie.modified.time))
+						result.push(movieDb)
+				}
+
+				curPage = pagination.currentPage + 1
+				if (curPage > pagination.totalPage)
+					break;
+
+				if (compareDate(timeLastModifed, movies[movies.length - 1].modified.time))
+					break;
+			}
+		}
+
+		return {
+			status: 200,
+			message: "Sucess",
+			elements: {
+				movies: result
+			}
+		}
+	} catch (err) {
+		return {
+			status: 500,
+			message: "Internal Server Error",
+			error: err
 		}
 	}
 }
@@ -200,5 +248,6 @@ const getUpdate = async () => {
 module.exports = {
 	getAll,
 	getUpdate,
-	getDetail
+	getDetail,
+	getListUpdate
 }

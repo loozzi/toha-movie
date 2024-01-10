@@ -8,6 +8,8 @@ router.get('/get-detail', crawlController.getDetail)
 
 router.get('/get-update', crawlController.getUpdate)
 
+router.get('/get-list-update', crawlController.getListUpdate)
+
 router.get('/', (req, res) => {
 	res.json({
 		status: 100,
