@@ -9,7 +9,8 @@ module.exports = {
 		} catch (err) {
 			res.json({
 				status: 500,
-				message: 'Internal Server Error'
+				message: 'Internal Server Error',
+				error: err
 			})
 		}
 	},
@@ -21,7 +22,8 @@ module.exports = {
 		} catch (err) {
 			res.json({
 				status: 500,
-				message: 'Internal Server Error'
+				message: 'Internal Server Error',
+				error: err
 			})
 		}
 	},
@@ -32,8 +34,21 @@ module.exports = {
 		} catch (err) {
 			res.json({
 				status: 500,
-				message: 'Internal Server Error'
+				message: 'Internal Server Error',
+				error: err
 			})
+		}
+	},
+	getListUpdate: async (req, res, next) => {
+		try {
+			const resp = await crawlService.getListUpdate()
+			res.json(resp)
+		} catch (err) {
+			res.json({
+				status: 500,
+				message: 'Internal Server Error',
+				error: err
+			});
 		}
 	}
 }
