@@ -4,7 +4,8 @@ const express = require('express')
 const cors = require('cors')
 const morgan = require('morgan')
 
-const connector = require('./connect/connect')
+const connector = require('./config/connect')
+const routes = require('./config/route.config')
 
 const app = express()
 
@@ -28,21 +29,6 @@ connector.connect((err) => {
 	}
 })
 
-// Default route
-app.use('/', (req, res) => {
-	res.json({
-		status: 405,
-		message: 'Method Not Allowed',
-	})
-})
-
-// Error logs
-app.use((err, req, res, next) => {
-	console.log(`${req.url}----${req.method}----${err.message}`)
-	res.json({
-		status: err.status || 500,
-		message: err.message || 'Internal Server Error',
-	})
-})
+app.use(routes)
 
 module.exports = app

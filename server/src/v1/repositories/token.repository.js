@@ -1,4 +1,4 @@
-const query = require('../connect/query')
+const query = require('../../config/query')
 
 module.exports = {
 	create: async (user_id, refresh_token) => {
