@@ -9,7 +9,7 @@ router.post('/register', authController.register)
 
 router.get('/logout', middleware.isLoggingIn, authController.logout)
 
-router.post('/refresh-token', middleware.isLoggingIn, authController.refreshToken)
+router.post('/refresh-token', authController.refreshToken)
 
 router.post('/forgot-password', authController.forgotPassword)
 

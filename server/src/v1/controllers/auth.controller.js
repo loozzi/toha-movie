@@ -68,7 +68,17 @@ module.exports = {
 		}
 	},
 	refreshToken: async (req, res, next) => {
-		// TODO: refresh token
+		try {
+			const { refreshToken } = req.body
+			const resp = await authService.refreshToken({ resfresh_token: refreshToken })
+			res.json(resp)
+		} catch (err) {
+			res.json({
+				status: 500,
+				message: 'Internal Server Error',
+				error: err
+			})
+		}
 	},
 	forgotPassword: async (req, res, next) => {
 		// TODO: forgot password

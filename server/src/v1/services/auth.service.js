@@ -139,7 +139,7 @@ const register = async ({ username, email, password }) => {
 }
 
 const logout = async ({ user_id }) => {
-	await tokenRepo.delete(user_id)
+	await tokenRepo.deleteById(user_id)
 	return {
 		status: 200,
 		message: 'Logout successfully'
@@ -199,10 +199,52 @@ const verifyEmail = async ({ user_id, otp }) => {
 	}
 }
 
+const refreshToken = async ({ resfresh_token }) => {
+	const tokenDb = await tokenRepo.findOneByToken(resfresh_token)
+
+	if (!tokenDb) {
+		return {
+			status: 401,
+			message: 'Invalid refresh token'
+		}
+	}
+
+	const tokenDetail = await tokenService.verify(resfresh_token)
+	if (!tokenDetail || tokenDetail.isRefreshToken === false) {
+		return {
+			status: 401,
+			message: 'Invalid refresh token'
+		}
+	}
+
+	const userDb = await userRepo.findOneById(tokenDetail.id)
+
+	const { accessToken, refreshToken } = await tokenService.generate(userDb)
+
+	const user = {
+		username: userDb.username,
+		id: userDb.id,
+		email: userDb.email,
+		balance: userDb.balance,
+	}
+
+	return {
+		status: 200,
+		message: 'Login successfully',
+		elements: {
+			accessToken,
+			refreshToken,
+			user
+		}
+	}
+
+}
+
 module.exports = {
 	login,
 	register,
 	sendOTP,
 	verifyEmail,
-	logout
+	logout,
+	refreshToken
 }

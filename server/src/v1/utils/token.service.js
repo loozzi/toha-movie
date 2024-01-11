@@ -20,19 +20,24 @@ const generate = async (user) => {
 	}, JWT_SECRET, { expiresIn: time_expires })
 
 	const refreshToken = await jwt.sign({
-		...payload,
+		id: user.id,
 		isRefreshToken: true
 	}, JWT_SECRET, { expiresIn: '30d' })
 
-	// await query(`delete from users_tokens where user_id = ${user.id}`)
-	// await query(`insert into users_tokens (user_id, refresh_token) values (${user.id}, '${refreshToken}')`)
-	// await tokenRepo.delete(user.id)
-	// await tokenRepo.create(user.id, refreshToken)
 	await tokenRepo.update(user.id, refreshToken)
 
 	return Promise.resolve({ accessToken, refreshToken })
 }
 
+const verify = async (token) => {
+	try {
+		const decoded = jwt.verify(token, JWT_SECRET)
+		return Promise.resolve(decoded)
+	} catch (err) {
+		return Promise.reject(err)
+	}
+}
+
 module.exports = {
-	generate
+	generate, verify
 }
