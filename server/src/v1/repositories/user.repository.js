@@ -14,16 +14,15 @@ const findOneByEmail = async (email) => {
 
 const update = async (user_id, data) => {
 	try {
-		await query(`update users set ? where id = ${user_id}`, data)
+		await query(`update users set ?, modified = current_timestamp where id = ${user_id}`, data)
 		return true
 	} catch (err) {
 		return false
 	}
 }
 
-const create = async (data) => {
+const create = async ({ username, email, password }) => {
 	try {
-		const { username, email, password } = data
 		await query(`insert into users set ?`, { username, email, password })
 		return true
 	} catch (err) {
@@ -31,18 +30,17 @@ const create = async (data) => {
 	}
 }
 
-const remove = async (data) => {
+const remove = async ({ id }) => {
 	try {
-		const { id } = data
-		await query(`update users set is_deleted = true where id = ${id}`)
+		await query(`update users set is_deleted = true, modified = current_timestamp where id = ${id}`)
 		return true
 	} catch (err) {
 		return false
 	}
 }
 
-const all = async (data) => {
-	return await query(`select * from users where is_deleted = false`)
+const all = async ({ limit, offset }) => {
+	return await query(`select * from users where is_deleted = false limit ${limit} offset ${offset}`)
 }
 
 const count = async (data) => {

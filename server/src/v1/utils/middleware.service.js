@@ -29,6 +29,7 @@ const isLoggingIn = async (req, res, next) => {
 
 const isMember = async (req, res, next) => {
 	const roles = await roleRepo.getRoles(res.data.id)
+
 	if (roles.some(role => role.slug === 'member')) {
 		res.data.roles = roles
 		next()
@@ -41,7 +42,8 @@ const isMember = async (req, res, next) => {
 }
 
 const isAdmin = async (req, res, next) => {
-	const roles = res.data.roles;
+	const roles = await roleRepo.getRoles(res.data.id)
+
 	if (roles.some(role => role.slug === 'admin')) {
 		next()
 	} else {

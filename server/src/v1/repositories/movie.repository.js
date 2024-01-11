@@ -28,7 +28,7 @@ module.exports = {
 			}
 			const movieOld = await findOneBySlug(slug);
 			if (!!movieOld) {
-				await query(`update movies set ? where id = ${movieOld.id}`, payloadMovie)
+				await query(`update movies set ? , modified = current_timestamp where id = ${movieOld.id}`, payloadMovie)
 			} else {
 				await query('insert into movies set ?', payloadMovie)
 
