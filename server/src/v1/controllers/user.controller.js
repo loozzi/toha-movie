@@ -42,20 +42,12 @@ module.exports = {
 			})
 		}
 	},
-	getUser: async (req, res, next) => {
+	getUsers: async (req, res, next) => {
 		try {
+			const { current_page, limit_page } = res.pagination
 
-		} catch (err) {
-			res.json({
-				status: 500,
-				message: 'Internal server error',
-				error: err
-			})
-		}
-	},
-	deleteUser: async (req, res, next) => {
-		try {
-
+			const resp = await userService.getUsers({ current_page, limit_page })
+			res.json(resp)
 		} catch (err) {
 			res.json({
 				status: 500,
@@ -66,7 +58,17 @@ module.exports = {
 	},
 	lockUser: async (req, res, next) => {
 		try {
+			const { user_id } = req.body
 
+			if (!user_id) {
+				return res.json({
+					status: 400,
+					message: 'User id is required'
+				})
+			}
+
+			const resp = await userService.lockUser({ user_id })
+			res.json(resp)
 		} catch (err) {
 			res.json({
 				status: 500,
@@ -77,7 +79,39 @@ module.exports = {
 	},
 	addRole: async (req, res, next) => {
 		try {
+			const { user_id, role_id } = req.body
 
+			if (!user_id || !role_id) {
+				return res.json({
+					status: 400,
+					message: 'User id and role id are required'
+				})
+			}
+
+			const resp = await userService.addRole({ user_id, role_id })
+			res.json(resp)
+		} catch (err) {
+			res.json({
+				status: 500,
+				message: 'Internal server error',
+				error: err
+			})
+		}
+	},
+	removeRole: async (req, res, next) => {
+		try {
+			const {
+				user_id, role_id
+			} = req.body
+			if (!user_id || !role_id) {
+				return res.json({
+					status: 400,
+					message: 'User id and role id are required'
+				})
+			}
+
+			const resp = await userService.removeRole({ user_id, role_id })
+			res.json(resp)
 		} catch (err) {
 			res.json({
 				status: 500,
