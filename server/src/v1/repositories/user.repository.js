@@ -14,7 +14,7 @@ const findOneByEmail = async (email) => {
 
 const update = async (user_id, data) => {
 	try {
-		await query(`update users set ? where id = ${user_id}`, data)
+		await query(`update users set ?, modified = current_timestamp where id = ${user_id}`, data)
 		return true
 	} catch (err) {
 		return false
@@ -34,7 +34,7 @@ const create = async (data) => {
 const remove = async (data) => {
 	try {
 		const { id } = data
-		await query(`update users set is_deleted = true where id = ${id}`)
+		await query(`update users set is_deleted = true, modified = current_timestamp where id = ${id}`)
 		return true
 	} catch (err) {
 		return false
