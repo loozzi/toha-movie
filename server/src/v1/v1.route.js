@@ -1,7 +1,9 @@
 const router = require('express').Router()
 
-const crawlRoute = require('./routes/crawl.route')
+router.use('/auth', require('./routes/auth.route'))
 
-router.use('/crawl', crawlRoute)
+router.use('/crawl', require('./routes/crawl.route'))
+
+router.use('/user', require('./routes/user.route'))
 
 module.exports = router

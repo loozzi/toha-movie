@@ -25,7 +25,7 @@ const generateTemplateOTP = (otp) => {
 				<p>Your OTP code is: </p>
 				<h2><strong>${otp}</strong></h2>
 				<p>Please enter this OTP code to verify your account.</p>
-				<p>This OTP will epxire later <strong>30</strong> minutes.</p>
+				<p>This OTP will expire later <strong>30</strong> minutes.</p>
     	</div>
 		`
 	}
