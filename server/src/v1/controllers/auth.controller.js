@@ -4,6 +4,12 @@ module.exports = {
 	login: async (req, res, next) => {
 		try {
 			const { email, password } = req.body
+			if (!email || !password) {
+				return res.json({
+					status: 400,
+					message: 'Email and password are required'
+				})
+			}
 			const resp = await authService.login({ email, password })
 			res.json(resp)
 		} catch (err) {
@@ -17,6 +23,13 @@ module.exports = {
 	register: async (req, res, next) => {
 		try {
 			const { username, email, password } = req.body
+
+			if (!username || !email || !password) {
+				return res.json({
+					status: 400,
+					message: 'Username, email and password are required'
+				})
+			}
 
 			const validateEmail = (email) => {
 				var re = /\S+@\S+\.\S+/
@@ -70,6 +83,13 @@ module.exports = {
 	refreshToken: async (req, res, next) => {
 		try {
 			const { refreshToken } = req.body
+			if (!refreshToken) {
+				return res.json({
+					status: 400,
+					message: 'Refresh token is required'
+				})
+			}
+
 			const resp = await authService.refreshToken({ resfresh_token: refreshToken })
 			res.json(resp)
 		} catch (err) {
@@ -123,6 +143,13 @@ module.exports = {
 		try {
 			const { otp } = req.body
 			const { id } = res.data
+			if (!otp) {
+				return res.json({
+					status: 400,
+					message: 'OTP is required'
+				})
+			}
+
 			const resp = await authService.verifyEmail({ otp, user_id: id })
 			res.json(resp)
 		}
