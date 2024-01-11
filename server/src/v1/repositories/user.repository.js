@@ -12,8 +12,13 @@ const findOneByEmail = async (email) => {
 	return (await query(`select * from users where email = '${email}' and is_deleted = false`))[0]
 }
 
-const update = async (data) => {
-
+const update = async (user_id, data) => {
+	try {
+		await query(`update users set ? where id = ${user_id}`, data)
+		return true
+	} catch (err) {
+		return false
+	}
 }
 
 const create = async (data) => {

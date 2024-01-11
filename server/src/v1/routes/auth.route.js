@@ -13,7 +13,7 @@ router.post('/refresh-token', authController.refreshToken)
 
 router.post('/forgot-password', authController.forgotPassword)
 
-router.post('/reset-password', authController.resetPassword)
+router.post('/reset-password', middleware.isLoggingIn, authController.resetPassword)
 
 router.post('/verify', middleware.isLoggingIn, authController.verifyEmail)
 

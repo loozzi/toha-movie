@@ -240,11 +240,32 @@ const refreshToken = async ({ resfresh_token }) => {
 
 }
 
+const resetPassword = async ({ id, password, new_password }) => {
+	const userDb = await userRepo.findOneById(id)
+	const isMatch = await bcrypt.compare(password, userDb.password)
+	if (!isMatch) {
+		return {
+			status: 401,
+			message: 'Password is incorrect'
+		}
+	}
+
+	const salt = await bcrypt.genSalt(10)
+	const hashPassword = await bcrypt.hash(new_password, salt)
+
+	await userRepo.update(id, { password: hashPassword })
+	return {
+		status: 200,
+		message: 'Reset password successfully'
+	}
+}
+
 module.exports = {
 	login,
 	register,
 	sendOTP,
 	verifyEmail,
 	logout,
-	refreshToken
+	refreshToken,
+	resetPassword
 }

@@ -84,7 +84,40 @@ module.exports = {
 		// TODO: forgot password
 	},
 	resetPassword: async (req, res, next) => {
-		// TODO: reset password
+		try {
+			const { password, newPassword } = req.body
+			const { id } = res.data
+
+			if (!password || !newPassword) {
+				return res.json({
+					status: 400,
+					message: 'Password and new password are required'
+				})
+			}
+
+			if (newPassword.length < 6) {
+				return res.json({
+					status: 400,
+					message: 'Password must be at least 6 characters'
+				})
+			}
+
+			if (newPassword === password) {
+				return res.json({
+					status: 400,
+					message: 'New password must be different from old password'
+				})
+			}
+
+			const resp = await authService.resetPassword({ id, password, new_password: newPassword })
+			res.json(resp)
+		} catch (err) {
+			res.json({
+				status: 500,
+				message: 'Internal Server Error',
+				error: err
+			})
+		}
 	},
 	verifyEmail: async (req, res, next) => {
 		try {
