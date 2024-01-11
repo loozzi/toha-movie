@@ -27,4 +27,8 @@ module.exports = {
 			where users_roles.user_id = ${user_id} and roles.is_deleted = false;
 		`)
 	},
+	addUser: async (user_id, role) => {
+		const role_id = (await query(`select id from roles where slug = '${role}' and is_deleted = false;`))[0].id
+		await query(`insert into users_roles set ?`, { user_id, role_id })
+	},
 }
