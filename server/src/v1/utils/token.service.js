@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken')
-const query = require('../connect/query')
+const query = require('../../config/query')
 const tokenRepo = require('../repositories/token.repository')
 
 const JWT_SECRET = process.env.JWT_SECRET
@@ -9,7 +9,8 @@ const generate = async (user) => {
 	const payload = {
 		id: user.id,
 		email: user.email,
-		username: user.username
+		username: user.username,
+		balance: user.balance
 	}
 
 	const accessToken = await jwt.sign({

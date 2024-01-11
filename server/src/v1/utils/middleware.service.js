@@ -14,10 +14,11 @@ const isLoggingIn = async (req, res, next) => {
 				status: 401,
 				message: 'Invalid token'
 			})
+		} else {
+			res.data = data
+			next()
 		}
 
-		res.data = data
-		next()
 	} catch (err) {
 		res.json({
 			status: 401,
