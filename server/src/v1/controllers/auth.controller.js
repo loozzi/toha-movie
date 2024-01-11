@@ -37,21 +37,21 @@ module.exports = {
 			}
 
 			if (username.length < 6 || username.length > 32) {
-				res.json({
+				return res.json({
 					status: 400,
 					message: 'Username must be between 6 and 32 characters'
 				})
 			}
 
 			if (password.length < 6) {
-				res.json({
+				return res.json({
 					status: 400,
 					message: 'Password must be at least 6 characters'
 				})
 			}
 
 			if (!validateEmail(email)) {
-				res.json({
+				return res.json({
 					status: 400,
 					message: 'Email is not valid'
 				})
