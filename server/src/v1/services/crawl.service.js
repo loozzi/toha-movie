@@ -1,5 +1,7 @@
-const movieRepo = require('../repositories/movie.repository')
 const axios = require('axios')
+const movieRepo = require('../repositories/movie.repository')
+const paginationService = require('../utils/pagination.service')
+
 
 const convertToTimestamp = (dateInp) => {
 	const [dateStr, timeStr] = dateInp.split("T");
@@ -67,6 +69,7 @@ const getDetail = async (slug) => {
 		directors: movie.director,
 		categories: movie.category,
 		countries: movie.country,
+		actors: movie.actor,
 		created: convertToTimestamp(movie.created.time),
 		modified: convertToTimestamp(movie.modified.time)
 	}
@@ -126,7 +129,6 @@ const getAll = async ({ cur_page, start_page, end_page }) => {
 				console.log("Page: ", curPage)
 				for (let movie of movies) {
 					const slug = movie.slug
-					const movieDb = await movieRepo.findOneBySlug(slug)
 					// if (!movieDb)
 					await getDetail(slug)
 					console.log(movie.name)
@@ -170,7 +172,6 @@ const getUpdate = async () => {
 				console.log("Page: ", curPage)
 				for (let movie of movies) {
 					const slug = movie.slug
-					const movieDb = await movieRepo.findOneBySlug(slug)
 					// if (!movieDb)
 					await getDetail(slug)
 					console.log(movie.name)
@@ -216,8 +217,12 @@ const getListUpdate = async () => {
 				for (let movie of movies) {
 					const slug = movie.slug
 					const movieDb = await movieRepo.findOneBySlug(slug)
-					if (compareDate(movieDb.modified, movie.modified.time))
-						result.push(movieDb)
+					if (movieDb) {
+						if (compareDate(movieDb.modified, movie.modified.time))
+							result.push(movie)
+					} else {
+						result.push(movie)
+					}
 				}
 
 				curPage = pagination.currentPage + 1
@@ -232,9 +237,12 @@ const getListUpdate = async () => {
 		return {
 			status: 200,
 			message: "Sucess",
-			elements: {
-				movies: result
-			}
+			elements: paginationService.to_form({
+				current_page: 1,
+				total_item: result.length,
+				data: result.map(e => ({ ...e, modified: e.modified.time, _id: undefined })),
+				limit: result.length
+			})
 		}
 	} catch (err) {
 		return {

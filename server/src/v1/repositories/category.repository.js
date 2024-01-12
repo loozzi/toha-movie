@@ -15,6 +15,31 @@ const findByMovieId = async (movie_id) => {
 	return await query(textQuery)
 }
 
+const findOneBySlug = async (slug) => {
+	return (await query(`select * from categories where slug = '${slug}' and is_deleted = false`))[0]
+}
+
+const create = async ({ name, slug }) => {
+	try {
+		await query(`insert into categories set ?`, { name, slug })
+		return true
+	} catch (err) {
+		return false
+	}
+}
+
+const addMovie = async ({ movie_id, category_id }) => {
+	try {
+		await query(`insert into movies_categories set ?`, { movie_id, category_id })
+		return true
+	} catch (err) {
+		return false
+	}
+}
+
 module.exports = {
-	findByMovieId
+	findByMovieId,
+	findOneBySlug,
+	create,
+	addMovie
 }

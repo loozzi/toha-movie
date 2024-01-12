@@ -17,5 +17,9 @@ router.get('/detail', movieController.getMovieDetail)
 // Get episodes by slug
 router.get('/episodes', midderware.isLoggingIn, midderware.isMember, movieController.getEpisodes)
 
+// ADMIN Routes
+// POST /api/v1/movie/add
+router.post('/add', midderware.isLoggingIn, midderware.isAdmin, movieController.addMovie)
+
 
 module.exports = router

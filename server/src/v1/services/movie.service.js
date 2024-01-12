@@ -2,6 +2,7 @@ const movieRepo = require('../repositories/movie.repository')
 const categoryRepo = require('../repositories/category.repository')
 const countryRepo = require('../repositories/country.repository')
 const directorRepo = require('../repositories/director.repository')
+const actorRepo = require('../repositories/actor.repository')
 const paginationService = require('../utils/pagination.service')
 
 const getMovies = async ({ current_page, limit_page, category_id, country_id, year, type, status }) => {
@@ -41,11 +42,21 @@ const getMovieDetail = async (slug) => {
 	const categories = await categoryRepo.findByMovieId(movie.id)
 	const countries = await countryRepo.findByMovieId(movie.id)
 	const directors = await directorRepo.findByMovieId(movie.id)
+	const actors = await actorRepo.findByMovieId(movie.id)
+	const uniqBy = (a, key) => {
+		var seen = {};
+		return a.filter(function (item) {
+			var k = key(item);
+			return seen.hasOwnProperty(k) ? false : (seen[k] = true);
+		})
+	}
+
 	const data = {
 		...movie,
 		categories,
 		countries,
-		directors
+		directors,
+		actors: uniqBy(actors, JSON.stringify)
 	}
 	return {
 		status: 200,
@@ -66,6 +77,13 @@ const getEpisodes = async (slug) => {
 
 	const severs = episodes.reduce((arr, e) => {
 		const id = arr.map(a => a.server_id).indexOf(e.server_id)
+		const episode = {
+			file_name: e.file_name,
+			file_slug: e.file_slug,
+			video_url: e.video_url,
+			m3u8_url: e.m3u8_url,
+			modified: e.modefied
+		}
 		if (id == -1) {
 			arr = [
 				...arr,
@@ -73,25 +91,11 @@ const getEpisodes = async (slug) => {
 					server_id: e.server_id,
 					server_name: e.server_name,
 					movie_id: e.movie_id,
-					episodes: [
-						{
-							file_name: e.file_name,
-							file_slug: e.file_slug,
-							video_url: e.video_url,
-							m3u8_url: e.m3u8_url,
-							modified: e.modefied
-						}
-					]
+					episodes: [episode]
 				}
 			]
 		} else {
-			arr[id].episodes.push({
-				file_name: e.file_name,
-				file_slug: e.file_slug,
-				video_url: e.video_url,
-				m3u8_url: e.m3u8_url,
-				modified: e.modefied
-			})
+			arr[id].episodes.push(episode)
 		}
 		return arr
 	}, [])
@@ -106,8 +110,40 @@ const getEpisodes = async (slug) => {
 
 }
 
+const addMovie = async ({ name, origin_name, content, type, status, thumb_url, trailer_url,
+	time, episode_current, episode_total, quality, lang,
+	showtimes, slug, year, view, chieurap, poster_url }) => {
+	const oldMovie = await movieRepo.findOneBySlug(slug)
+	if (oldMovie) {
+		return {
+			status: 400,
+			message: 'Slug existed'
+		}
+	}
+
+	const payload = {
+		name, origin_name, content, type, status, thumb_url, trailer_url,
+		time, episode_current, episode_total, quality, lang, slug, year,
+		chieurap, poster_url,
+		showtimes, view
+	}
+
+	const statusCreate = await movieRepo.addMovie(payload)
+	if (!statusCreate) {
+		return {
+			status: 401,
+			message: 'Cannot create movie'
+		}
+	}
+	return {
+		status: 200,
+		message: 'Create movie successfully'
+	}
+}
+
 module.exports = {
 	getMovies,
 	getMovieDetail,
-	getEpisodes
+	getEpisodes,
+	addMovie
 }
