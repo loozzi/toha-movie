@@ -7,4 +7,10 @@ const pagination = require('../utils/pagination.service')
 // Get all movies order by modified 
 router.get('/all', pagination.midderware, movieController.getMovies)
 
+// GET /api/v1/movie/detail
+// Get movie detail by slug
+router.get('/detail', movieController.getMovieDetail)
+
+
+
 module.exports = router

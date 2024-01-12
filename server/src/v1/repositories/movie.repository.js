@@ -1,7 +1,22 @@
 const query = require('../../config/query')
 
 const findOneBySlug = async (slug) => {
-	return (await query(`select * from movies where slug = '${slug}' and is_deleted = false`))[0]
+	const whereClauses = [
+		`m.is_deleted = false`,
+		`m.slug = '${slug}'`
+	]
+
+	const textQuery =
+		`select 
+			m.id, m.name, m.origin_name, m.slug, m.type, m.status, 
+			m.year, m.content, m.thumb_url, m.trailer_url, m.time, 
+			m.episode_current, m.episode_total, m.quality, 
+			m.lang, m.showtimes, 
+			m.view, m.chieurap, m.poster_url, m.modified
+			from movies m
+		where ${whereClauses.filter(e => e.length).join(' and ')}`
+
+	return (await query(textQuery))[0]
 }
 
 const find = async (query) => { }
