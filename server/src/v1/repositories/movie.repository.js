@@ -58,6 +58,24 @@ const all = async ({ limit, offset, category_id, country_id, year, type, status 
 	return await query(textQuery)
 }
 
+const findEpisodesByMovieId = async (movie_id) => {
+	const whereClauses = [
+		`e.is_deleted = false`,
+		`s.is_deleted = false`,
+		`s.movie_id = ${movie_id}`
+	]
+
+	const textQuery =
+		`select 
+			e.server_id, s.movie_id, s.name as server_name, 
+			e.name as file_name, e.slug as file_slug, 
+			e.video_url,  e.m3u8_url, e.modified 
+		from episodes e
+		inner join servers s on s.id = e.server_id
+		where ${whereClauses.join(' and ')}; `
+
+	return await query(textQuery)
+}
 
 module.exports = {
 	create: async (data) => {
@@ -194,5 +212,6 @@ module.exports = {
 	findOneBySlug,
 	findLastModifed,
 	count,
-	all
+	all,
+	findEpisodesByMovieId
 }

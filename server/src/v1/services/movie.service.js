@@ -54,7 +54,60 @@ const getMovieDetail = async (slug) => {
 	}
 }
 
+const getEpisodes = async (slug) => {
+	const movie = await movieRepo.findOneBySlug(slug)
+	if (!movie) {
+		return {
+			status: 404,
+			message: 'Movie not found'
+		}
+	}
+	const episodes = await movieRepo.findEpisodesByMovieId(movie.id)
+
+	const severs = episodes.reduce((arr, e) => {
+		const id = arr.map(a => a.server_id).indexOf(e.server_id)
+		if (id == -1) {
+			arr = [
+				...arr,
+				{
+					server_id: e.server_id,
+					server_name: e.server_name,
+					movie_id: e.movie_id,
+					episodes: [
+						{
+							file_name: e.file_name,
+							file_slug: e.file_slug,
+							video_url: e.video_url,
+							m3u8_url: e.m3u8_url,
+							modified: e.modefied
+						}
+					]
+				}
+			]
+		} else {
+			arr[id].episodes.push({
+				file_name: e.file_name,
+				file_slug: e.file_slug,
+				video_url: e.video_url,
+				m3u8_url: e.m3u8_url,
+				modified: e.modefied
+			})
+		}
+		return arr
+	}, [])
+
+	return {
+		status: 200,
+		message: 'Get episodes successfully',
+		elements: {
+			items: severs
+		}
+	}
+
+}
+
 module.exports = {
 	getMovies,
-	getMovieDetail
+	getMovieDetail,
+	getEpisodes
 }
