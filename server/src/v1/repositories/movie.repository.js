@@ -10,6 +10,39 @@ const findLastModifed = async () => {
 	return (await query(`select * from movies order by modified desc limit 1;`))[0]
 }
 
+const count = async () => {
+	return (await query(`select count(*) as total from movies where is_deleted = false`))[0].total
+}
+
+const all = async ({ limit, offset, category_id, country_id, year, type, status }) => {
+	const whereClauses = [
+		`m.is_deleted = false`,
+		`mc.is_deleted = false`,
+		`mct.is_deleted = false`,
+		`c.is_deleted = false`,
+		`ct.is_deleted = false`,
+		category_id ? `m.id in (select movie_id from movies_categories where category_id = ${category_id})` : '',
+		country_id ? `m.id in (select movie_id from movies_countries where country_id = ${country_id})` : '',
+		year ? `year = ${year}` : '',
+		type ? `type = '${type}'` : '',
+		status ? `status = '${status}'` : '',
+	]
+
+	const textQuery =
+		`select m.id, m.name, m.origin_name, m.slug, m.type, m.status, m.year, 
+			group_concat(distinct c.name separator ', ') as category, 
+			group_concat(distinct ct.name separator ', ') as country, 
+			m.view, m.thumb_url, m.modified from movies m
+		inner join movies_categories mc on m.id = mc.movie_id
+		inner join categories c on mc.category_id = c.id
+		inner join movies_countries mct on m.id = mct.movie_id
+		inner join countries ct on mct.country_id = ct.id
+		where ${whereClauses.filter(e => e.length).join(' and ')}
+		group by m.id
+		limit ${limit} offset ${offset}`
+	return await query(textQuery)
+}
+
 
 module.exports = {
 	create: async (data) => {
@@ -144,5 +177,7 @@ module.exports = {
 	},
 	find,
 	findOneBySlug,
-	findLastModifed
+	findLastModifed,
+	count,
+	all
 }
