@@ -6,4 +6,6 @@ router.use('/crawl', require('./routes/crawl.route'))
 
 router.use('/user', require('./routes/user.route'))
 
+router.use('/movie', require('./routes/movie.route'))
+
 module.exports = router

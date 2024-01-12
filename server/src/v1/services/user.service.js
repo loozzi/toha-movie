@@ -31,7 +31,6 @@ const changeEmail = async ({ user_id, email, password }) => {
 
 const getUsers = async ({ current_page, limit_page }) => {
 	const total_item = await userRepo.count()
-	const total_page = Math.ceil(total_item / limit_page)
 
 	const offset = (current_page - 1) * limit_page
 	const limit = limit_page
@@ -53,11 +52,11 @@ const getUsers = async ({ current_page, limit_page }) => {
 	return {
 		status: 200,
 		message: 'Get users successfully',
-		data: pagination.to_form({
+		elements: pagination.to_form({
 			current_page,
-			total_page,
 			total_item,
-			data
+			data,
+			limit
 		})
 	}
 }

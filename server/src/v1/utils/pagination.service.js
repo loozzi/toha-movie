@@ -1,12 +1,12 @@
 module.exports = {
-	to_form: ({ current_page, total_page, total_item, count, data }) => {
+	to_form: ({ current_page, total_item, data, limit }) => {
 		return {
 			items: data ?? [],
 			pagination: {
 				current_page: current_page ?? 1,
-				total_page: total_page ?? 1,
+				total_page: Math.ceil(total_item / limit) ?? 1,
 				total_item: total_item ?? 0,
-				count: count ?? 0
+				count: data.length ?? 0
 			}
 		}
 	},

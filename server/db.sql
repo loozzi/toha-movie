@@ -88,7 +88,7 @@ create table if not exists movies(
 	episode_total varchar(255) default '',
 	quality varchar(25) default 'HD',
 	lang varchar(255) default '',
-	nofity varchar(255) default '',
+	notify varchar(255) default '',
 	showtimes varchar(255) default '',
 	slug varchar(255) not null,
 	year int not null default 0,
