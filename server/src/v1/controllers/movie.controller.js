@@ -27,5 +27,18 @@ module.exports = {
 				error: err
 			})
 		}
+	},
+	getEpisodes: async (req, res, next) => {
+		try {
+			const { slug } = req.query
+			const resp = await movieService.getEpisodes(slug)
+			res.json(resp)
+		} catch (err) {
+			res.json({
+				status: 500,
+				message: 'Internal Server Error',
+				error: err
+			})
+		}
 	}
 }

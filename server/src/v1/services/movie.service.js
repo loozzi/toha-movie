@@ -54,7 +54,27 @@ const getMovieDetail = async (slug) => {
 	}
 }
 
+const getEpisodes = async (slug) => {
+	const movie = await movieRepo.findOneBySlug(slug)
+	if (!movie) {
+		return {
+			status: 404,
+			message: 'Movie not found'
+		}
+	}
+	const episodes = await movieRepo.findEpisodesByMovieId(movie.id)
+	return {
+		status: 200,
+		message: 'Get episodes successfully',
+		elements: {
+			items: episodes
+		}
+	}
+
+}
+
 module.exports = {
 	getMovies,
-	getMovieDetail
+	getMovieDetail,
+	getEpisodes
 }
