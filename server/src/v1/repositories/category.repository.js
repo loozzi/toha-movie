@@ -37,9 +37,24 @@ const addMovie = async ({ movie_id, category_id }) => {
 	}
 }
 
+const removeMovie = async ({ movie_id, category_id }) => {
+	try {
+		await query(`update movies_categories set is_deleted = true where movie_id = ${movie_id} and category_id = ${category_id}`)
+		return true
+	} catch (err) {
+		return false
+	}
+}
+
+const isMovieExist = async ({ movie_id, category_id }) => {
+	return (await query(`select * from movies_categories where movie_id = ${movie_id} and category_id = ${category_id} and is_deleted = false`)).length > 0
+}
+
 module.exports = {
 	findByMovieId,
 	findOneBySlug,
 	create,
-	addMovie
+	addMovie,
+	removeMovie,
+	isMovieExist
 }

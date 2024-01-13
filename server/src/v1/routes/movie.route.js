@@ -21,5 +21,7 @@ router.get('/episodes', midderware.isLoggingIn, midderware.isMember, movieContro
 // POST /api/v1/movie/add
 router.post('/add', midderware.isLoggingIn, midderware.isAdmin, movieController.addMovie)
 
+// PUT /api/v1/movie/update
+router.put('/update', midderware.isLoggingIn, midderware.isAdmin, movieController.updateMovie)
 
 module.exports = router

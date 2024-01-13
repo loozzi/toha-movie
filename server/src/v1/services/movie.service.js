@@ -110,9 +110,12 @@ const getEpisodes = async (slug) => {
 
 }
 
-const addMovie = async ({ name, origin_name, content, type, status, thumb_url, trailer_url,
+const addMovie = async ({
+	name, origin_name, content, type, status, thumb_url, trailer_url,
 	time, episode_current, episode_total, quality, lang,
-	showtimes, slug, year, view, chieurap, poster_url }) => {
+	showtimes, slug, year, view, chieurap, poster_url,
+	categories, countries, directors, actors
+}) => {
 	const oldMovie = await movieRepo.findOneBySlug(slug)
 	if (oldMovie) {
 		return {
@@ -135,9 +138,114 @@ const addMovie = async ({ name, origin_name, content, type, status, thumb_url, t
 			message: 'Cannot create movie'
 		}
 	}
+	const movie = await movieRepo.findOneBySlug(slug)
+	const movie_id = movie.id
+	categories.forEach(async (category_id) => {
+		await categoryRepo.addMovie({ movie_id, category_id })
+	})
+
+	countries.forEach(async (country_id) => {
+		await countryRepo.addMovie({ movie_id, country_id })
+	})
+
+	directors.forEach(async (director_id) => {
+		await directorRepo.addMovie({ movie_id, director_id })
+	})
+
+	actors.forEach(async (actor_id) => {
+		await actorRepo.addMovie({ movie_id, actor_id })
+	})
+
 	return {
 		status: 200,
 		message: 'Create movie successfully'
+	}
+}
+
+const updateMovie = async ({ id, name, origin_name, content, type, status, thumb_url, trailer_url,
+	time, episode_current, episode_total, quality, lang,
+	showtimes, slug, year, chieurap, poster_url,
+	categories, countries, directors, actors
+}) => {
+	const movie_id = id
+
+	const movie = await movieRepo.findOneById(movie_id)
+	if (!movie) {
+		return {
+			status: 404,
+			message: 'Movie not found'
+		}
+	}
+
+	const payload = {
+		movie_id,
+		name, origin_name, content, type, status, thumb_url, trailer_url,
+		time, episode_current, episode_total, quality, lang, slug, year,
+		chieurap, poster_url,
+		showtimes
+	}
+
+	const statusUpdate = await movieRepo.updateMovie(payload)
+
+	if (!statusUpdate) {
+		return {
+			status: 401,
+			message: 'Cannot update movie'
+		}
+	}
+
+	const oldCategories = await categoryRepo.findByMovieId(id)
+	const oldCountries = await countryRepo.findByMovieId(id)
+	const oldDirectors = await directorRepo.findByMovieId(id)
+	const oldActors = await actorRepo.findByMovieId(id)
+
+	oldCategories.forEach(async (category) => {
+		if (!categories.includes(category.id))
+			await categoryRepo.removeMovie({ movie_id: id, category_id: category.id })
+	})
+
+	oldCountries.forEach(async (country) => {
+		if (!countries.includes(country.id))
+			await countryRepo.removeMovie({ movie_id: id, country_id: country.id })
+	})
+
+	oldDirectors.forEach(async (director) => {
+		if (!directors.includes(director.id))
+			await directorRepo.removeMovie({ movie_id: id, director_id: director.id })
+	})
+
+	oldActors.forEach(async (actor) => {
+		if (!actors.includes(actor.id))
+			await actorRepo.removeMovie({ movie_id: id, actor_id: actor.id })
+	})
+
+	categories.forEach(async (category_id) => {
+		const isExist = await categoryRepo.isMovieExist({ movie_id: id, category_id })
+		if (!isExist)
+			await categoryRepo.addMovie({ movie_id, category_id })
+	})
+
+	countries.forEach(async (country_id) => {
+		const isExist = await countryRepo.isMovieExist({ movie_id: id, country_id })
+		if (!isExist)
+			await countryRepo.addMovie({ movie_id, country_id })
+	})
+
+	directors.forEach(async (director_id) => {
+		const isExist = await directorRepo.isMovieExist({ movie_id: id, director_id })
+		if (!isExist)
+			await directorRepo.addMovie({ movie_id, director_id })
+	})
+
+	actors.forEach(async (actor_id) => {
+		const isExist = await actorRepo.isMovieExist({ movie_id: id, actor_id })
+		if (!isExist)
+			await actorRepo.addMovie({ movie_id, actor_id })
+	})
+
+	return {
+		status: 200,
+		message: 'Update movie successfully'
 	}
 }
 
@@ -145,5 +253,6 @@ module.exports = {
 	getMovies,
 	getMovieDetail,
 	getEpisodes,
-	addMovie
+	addMovie,
+	updateMovie
 }

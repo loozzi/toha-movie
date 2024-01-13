@@ -27,6 +27,10 @@ const findOneBySlug = async (slug) => {
 	return (await query(textQuery))[0]
 }
 
+const findOneById = async (id) => {
+	return (await query(`select * from movies where id = ${id} and is_deleted = false`))[0]
+}
+
 const findLastModifed = async () => {
 	return (await query(`select * from movies order by modified desc limit 1;`))[0]
 }
@@ -105,16 +109,17 @@ const addMovie = async ({
 const updateMovie = async ({ movie_id,
 	name, origin_name, content, type, status, thumb_url, trailer_url,
 	time, episode_current, episode_total, quality, lang,
-	showtimes, slug, year, view, chieurap, poster_url
+	showtimes, slug, year, chieurap, poster_url
 }) => {
 	try {
 		const payload = {
 			name, origin_name, content, type, status, thumb_url, trailer_url,
 			time, episode_current, episode_total, quality, lang,
-			showtimes, slug, year, view, chieurap, poster_url
+			showtimes, slug, year, chieurap, poster_url
 		}
 
 		await query(`update movies set ? , modified = current_timestamp where id = ${movie_id}`, payload)
+		return true
 	} catch (err) {
 		return false
 	}
@@ -259,9 +264,11 @@ module.exports = {
 	addEpisode,
 	updateEpisode,
 	findOneBySlug,
+	findOneById,
 	findLastModifed,
 	count,
 	all,
 	findEpisodesByMovieId,
-	addMovie
+	addMovie,
+	updateMovie
 }
