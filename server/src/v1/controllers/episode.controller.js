@@ -42,5 +42,25 @@ module.exports = {
 				error: err
 			})
 		}
+	},
+	delete: async (req, res, next) => {
+		try {
+			const { server_id, slug } = req.query
+			if (!server_id || !slug) {
+				return res.json({
+					status: 400,
+					message: 'Missing required fields'
+				})
+			}
+
+			const resp = await enpisodeService.delete({ server_id, slug })
+			res.json(resp)
+		} catch (err) {
+			res.json({
+				status: 500,
+				message: 'Internal Server Error',
+				error: err
+			})
+		}
 	}
 }

@@ -27,9 +27,19 @@ const update = async ({ server_id, slug, episode }) => {
 	}
 }
 
+const remove = async ({ server_id, slug }) => {
+	try {
+		await query(`update episodes set is_deleted = true where server_id = ${server_id} and slug = '${slug}'`)
+		return true
+	} catch (err) {
+		return false
+	}
+}
+
 module.exports = {
 	getAllByServer,
 	create,
 	findOne,
-	update
+	update,
+	remove
 }

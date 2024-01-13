@@ -11,4 +11,8 @@ router.post('/create', middleware.isLoggingIn, middleware.isAdmin, enpisodeContr
 // Update episode by server_id and old slug
 router.put('/update', middleware.isLoggingIn, middleware.isAdmin, enpisodeController.update)
 
+// DELETE /api/v1/episode/delete
+// Delete episode by server_id and slug
+router.delete('/delete', middleware.isLoggingIn, middleware.isAdmin, enpisodeController.delete)
+
 module.exports = router

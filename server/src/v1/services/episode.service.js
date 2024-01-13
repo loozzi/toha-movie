@@ -72,7 +72,32 @@ const update = async ({ server_id, episode, old_slug }) => {
 	}
 }
 
+const remove = async ({ server_id, slug }) => {
+	const ep = await episodeRepo.findOne({ server_id, slug })
+	if (!ep) {
+		return {
+			status: 404,
+			message: 'Episode not found'
+		}
+	}
+
+	const statusRemove = await episodeRepo.remove({ server_id, slug })
+	if (!statusRemove) {
+		return {
+			status: 500,
+			message: 'Internal Server Error',
+			error: 'Cannot delete episode'
+		}
+	}
+
+	return {
+		status: 200,
+		message: 'Delete episode successfully'
+	}
+}
+
 module.exports = {
 	create,
-	update
+	update,
+	delete: remove
 }
