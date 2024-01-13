@@ -39,7 +39,10 @@ const addMovie = async ({ movie_id, category_id }) => {
 
 const removeMovie = async ({ movie_id, category_id }) => {
 	try {
-		await query(`update movies_categories set is_deleted = true where movie_id = ${movie_id} and category_id = ${category_id}`)
+		if (category_id)
+			await query(`update movies_categories set is_deleted = true where movie_id = ${movie_id} and category_id = ${category_id}`)
+		else
+			await query(`update movies_categories set is_deleted = true where movie_id = ${movie_id}`)
 		return true
 	} catch (err) {
 		return false

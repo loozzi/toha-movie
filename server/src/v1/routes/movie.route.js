@@ -24,4 +24,7 @@ router.post('/add', midderware.isLoggingIn, midderware.isAdmin, movieController.
 // PUT /api/v1/movie/update
 router.put('/update', midderware.isLoggingIn, midderware.isAdmin, movieController.updateMovie)
 
+// DELETE /api/v1/movie/delete
+router.delete('/delete', midderware.isLoggingIn, midderware.isAdmin, movieController.deleteMovie)
+
 module.exports = router

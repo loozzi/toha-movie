@@ -123,5 +123,24 @@ module.exports = {
 				error: err
 			})
 		}
+	},
+	deleteMovie: async (req, res, next) => {
+		try {
+			const { id } = req.query
+			if (!id) {
+				return res.json({
+					status: 400,
+					message: 'Missing id'
+				})
+			}
+			const resp = await movieService.deleteMovie(id)
+			res.json(resp)
+		} catch (err) {
+			res.json({
+				status: 500,
+				message: 'Internal Server Error',
+				error: err
+			})
+		}
 	}
 }

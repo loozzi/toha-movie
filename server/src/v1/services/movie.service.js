@@ -249,10 +249,35 @@ const updateMovie = async ({ id, name, origin_name, content, type, status, thumb
 	}
 }
 
+const deleteMovie = async (id) => {
+	const movie = await movieRepo.findOneById(id)
+	if (!movie) {
+		return {
+			status: 404,
+			message: 'Movie not found'
+		}
+	}
+
+	const statusDelete = await movieRepo.deleteMovie({ movie_id: id })
+
+	if (!statusDelete) {
+		return {
+			status: 401,
+			message: 'Cannot delete movie'
+		}
+	}
+
+	return {
+		status: 200,
+		message: 'Delete movie successfully'
+	}
+}
+
 module.exports = {
 	getMovies,
 	getMovieDetail,
 	getEpisodes,
 	addMovie,
-	updateMovie
+	updateMovie,
+	deleteMovie
 }

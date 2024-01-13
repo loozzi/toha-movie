@@ -259,6 +259,19 @@ const updateEpisode = async ({ server_name, server_data, movie_id }) => {
 	}
 }
 
+const deleteMovie = async ({ movie_id }) => {
+	try {
+		await query(`update movies set is_deleted = true where id = ${movie_id}`)
+		await categoryRepo.removeMovie({ movie_id })
+		await countryRepo.removeMovie({ movie_id })
+		await directorRepo.removeMovie({ movie_id })
+		await actorRepo.removeMovie({ movie_id })
+		return true
+	} catch (err) {
+		return false
+	}
+}
+
 module.exports = {
 	create,
 	addEpisode,
@@ -270,5 +283,6 @@ module.exports = {
 	all,
 	findEpisodesByMovieId,
 	addMovie,
-	updateMovie
+	updateMovie,
+	deleteMovie
 }
