@@ -14,7 +14,22 @@ const create = async ({ name, slug, filename, video_url, m3u8_url, server_id }) 
 	}
 }
 
+const findOne = async ({ server_id, slug }) => {
+	return (await query(`select * from episodes where server_id = ${server_id} and slug = '${slug}' and is_deleted = false`))[0]
+}
+
+const update = async ({ server_id, slug, episode }) => {
+	try {
+		await query(`update episodes set ? where server_id = ${server_id} and slug = '${slug}'`, episode)
+		return true
+	} catch (err) {
+		return false
+	}
+}
+
 module.exports = {
 	getAllByServer,
-	create
+	create,
+	findOne,
+	update
 }

@@ -38,6 +38,41 @@ const create = async ({ server_id, episode }) => {
 	}
 }
 
+const update = async ({ server_id, episode, old_slug }) => {
+	const ep = await episodeRepo.findOne({ server_id, slug: old_slug })
+
+	if (!ep) {
+		return {
+			status: 404,
+			message: 'Episode not found'
+		}
+	}
+
+
+	const statusUpdate = await episodeRepo.update({
+		server_id,
+		slug: old_slug,
+		episode: {
+			...episode,
+			server_id
+		}
+	})
+
+	if (!statusUpdate) {
+		return {
+			status: 500,
+			message: 'Internal Server Error',
+			error: 'Cannot update episode'
+		}
+	}
+
+	return {
+		status: 200,
+		message: 'Update episode successfully'
+	}
+}
+
 module.exports = {
-	create
+	create,
+	update
 }

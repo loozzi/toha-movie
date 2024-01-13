@@ -21,5 +21,26 @@ module.exports = {
 				error: err
 			})
 		}
+	},
+	update: async (req, res, next) => {
+		try {
+			const { name, slug, filename, video_url, m3u8_url, server_id, old_slug } = req.body
+			const episode = { name, slug, filename, video_url, m3u8_url }
+			if (!name || !slug || !filename || !video_url || !m3u8_url || !server_id || !old_slug) {
+				return res.json({
+					status: 400,
+					message: 'Missing required fields'
+				})
+			}
+
+			const resp = await enpisodeService.update({ server_id, episode, old_slug })
+			res.json(resp)
+		} catch (err) {
+			res.json({
+				status: 500,
+				message: 'Internal Server Error',
+				error: err
+			})
+		}
 	}
 }
