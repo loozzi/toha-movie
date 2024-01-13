@@ -8,4 +8,6 @@ router.use('/user', require('./routes/user.route'))
 
 router.use('/movie', require('./routes/movie.route'))
 
+router.use('/episode', require('./routes/episode.route'))
+
 module.exports = router

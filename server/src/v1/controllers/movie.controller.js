@@ -68,7 +68,7 @@ module.exports = {
 				|| !quality || !lang || !year || !slug
 				|| !trailer_url || !poster_url) {
 				return res.json({
-					status: 401,
+					status: 400,
 					message: 'Invalid data'
 				})
 			}
@@ -109,7 +109,7 @@ module.exports = {
 				|| !quality || !lang || !year || !slug
 				|| !trailer_url || !poster_url) {
 				return res.json({
-					status: 401,
+					status: 400,
 					message: 'Invalid data'
 				})
 			}
