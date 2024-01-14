@@ -86,6 +86,7 @@ const update = async ({ id, name, slug }) => {
 
 const remove = async ({ id }) => {
 	try {
+		await query(`delete from movies_directors director_id = ${id}`)
 		await query(`update directors set is_deleted = true where id = ${id}`)
 		return true
 	} catch (err) {
