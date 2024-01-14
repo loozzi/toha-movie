@@ -53,11 +53,95 @@ const isMovieExist = async ({ movie_id, actor_id }) => {
 	return (await query(`select * from movies_actors where movie_id = ${movie_id} and actor_id = ${actor_id} and is_deleted = false`)).length > 0
 }
 
+const count = async () => {
+	return (await query(`select count(*) as total from actors where is_deleted = false`))[0].total
+}
+
+const all = async ({ limit, offset }) => {
+	return await query(`
+		select a.id, a.name, a.slug, count(ma.movie_id) as count, a.modified from actors as a
+		left join movies_actors as ma on a.id = ma.actor_id
+		where a.is_deleted = false 
+		group by a.id
+		order by count desc
+		limit ${limit} offset ${offset}
+	`)
+}
+
+const update = async ({ id, name, slug }) => {
+	try {
+		await query(`update actors set ? where id = ${id}`, { name, slug })
+		return true
+	} catch (err) {
+		return false
+	}
+}
+
+const remove = async ({ id }) => {
+	try {
+		await query(`delete from movies_actors where actor_id = ${id}`)
+		await query(`update actors set is_deleted = true where id = ${id}`)
+		return true
+	} catch (err) {
+		return false
+	}
+}
+
+const search = async ({ limit, offset, name, slug }) => {
+	const whereClauses = [
+		`a.is_deleted = false`
+	]
+
+	if (name) {
+		whereClauses.push(`a.name like '%${name}%'`)
+	}
+
+	if (slug) {
+		whereClauses.push(`a.slug like '%${slug}%'`)
+	}
+
+	const textQuery =
+		`select a.id, a.name, a.slug, count(ma.movie_id) as count, a.modified from actors as a
+		left join movies_actors as ma on a.id = ma.actor_id
+		where ${whereClauses.join(' and ')}
+		group by a.id
+		order by count desc
+		limit ${limit} offset ${offset}`
+
+	return await query(textQuery)
+}
+
+const countSearch = async ({ name, slug }) => {
+	const whereClauses = [
+		`a.is_deleted = false`
+	]
+
+	if (name) {
+		whereClauses.push(`a.name like '%${name}%'`)
+	}
+
+	if (slug) {
+		whereClauses.push(`a.slug like '%${slug}%'`)
+	}
+
+	const textQuery =
+		`select count(*) as total from actors as a
+		where ${whereClauses.join(' and ')}`
+
+	return (await query(textQuery))[0].total
+}
+
 module.exports = {
 	findByMovieId,
 	findOneBySlug,
 	create,
 	addMovie,
 	removeMovie,
-	isMovieExist
+	isMovieExist,
+	count,
+	all,
+	update,
+	remove,
+	search,
+	countSearch
 }
