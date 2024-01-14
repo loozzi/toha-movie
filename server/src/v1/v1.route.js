@@ -12,4 +12,6 @@ router.use('/episode', require('./routes/episode.route'))
 
 router.use('/server', require('./routes/server.route'))
 
+router.use('/category', require('./routes/category.route'))
+
 module.exports = router
