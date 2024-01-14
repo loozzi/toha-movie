@@ -1,7 +1,11 @@
 const query = require('../../config/query')
 
 const findByMovieId = async (movie_id) => {
-
+	try {
+		return await query(`select * from rates where movie_id = ${movie_id}`)
+	} catch (err) {
+		return []
+	}
 }
 
 const create = async ({ movie_id, user_id, score }) => {

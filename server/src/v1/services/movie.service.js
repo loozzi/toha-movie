@@ -46,6 +46,12 @@ const getMovieDetail = async (slug) => {
 	const countries = await countryRepo.findByMovieId(movie.id)
 	const directors = await directorRepo.findByMovieId(movie.id)
 	const actors = await actorRepo.findByMovieId(movie.id)
+
+	const rates = await rateRepo.findByMovieId(movie.id)
+	const total_rate = rates.length
+	const total_rate_score = rates.reduce((sum, rate) => sum + rate.rate, 0)
+	const rate_score = total_rate > 0 ? total_rate_score / total_rate : 0
+
 	const uniqBy = (a, key) => {
 		var seen = {};
 		return a.filter(function (item) {
@@ -56,10 +62,11 @@ const getMovieDetail = async (slug) => {
 
 	const data = {
 		...movie,
+		rate: Math.round(rate_score * 10) / 10,
 		categories,
 		countries,
 		directors,
-		actors: uniqBy(actors, JSON.stringify)
+		actors: uniqBy(actors, JSON.stringify),
 	}
 	return {
 		status: 200,
