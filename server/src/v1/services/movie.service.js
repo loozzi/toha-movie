@@ -5,6 +5,8 @@ const directorRepo = require('../repositories/director.repository')
 const actorRepo = require('../repositories/actor.repository')
 const paginationService = require('../utils/pagination.service')
 const commentRepo = require('../repositories/comment.repository')
+const rateRepo = require('../repositories/rate.repository')
+
 
 const getMovies = async ({ current_page, limit_page, category_id, country_id, year, type, status }) => {
 	const total_item = await movieRepo.count()
@@ -359,6 +361,28 @@ const deleteComment = async ({ comment_id, user_id }) => {
 	}
 }
 
+const rateMovie = async ({ movie_id, user_id, score }) => {
+	const isRated = await rateRepo.isRated({ movie_id, user_id })
+	let isCreated = false
+	if (isRated) {
+		isCreated = await rateRepo.update({ movie_id, user_id, score })
+	}
+	else {
+		isCreated = await rateRepo.create({ movie_id, user_id, score })
+	}
+
+	if (!isCreated) {
+		return {
+			status: 401,
+			message: 'Cannot rate movie'
+		}
+	}
+
+	return {
+		status: 200,
+		message: 'Rate movie successfully'
+	}
+}
 
 module.exports = {
 	getMovies,
@@ -370,5 +394,6 @@ module.exports = {
 	getComments,
 	addComment,
 	updateComment,
-	deleteComment
+	deleteComment,
+	rateMovie
 }

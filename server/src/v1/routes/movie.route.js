@@ -32,6 +32,10 @@ router.put('/comment', midderware.isLoggingIn, midderware.isMember, movieControl
 // Delete comment to movie
 router.delete('/comment', midderware.isLoggingIn, midderware.isMember, movieController.deleteComment)
 
+// POST /api/v1/movie/rate
+// Rate movie
+router.post('/rate', midderware.isLoggingIn, midderware.isMember, movieController.rateMovie)
+
 // ADMIN Routes
 // POST /api/v1/movie/add
 // Add new movie
