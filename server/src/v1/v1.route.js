@@ -12,4 +12,12 @@ router.use('/episode', require('./routes/episode.route'))
 
 router.use('/server', require('./routes/server.route'))
 
+router.use('/category', require('./routes/category.route'))
+
+router.use('/director', require('./routes/director.route'))
+
+router.use('/country', require('./routes/country.route'))
+
+router.use('/actor', require('./routes/actor.route'))
+
 module.exports = router
