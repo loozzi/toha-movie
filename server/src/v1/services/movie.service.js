@@ -4,6 +4,9 @@ const countryRepo = require('../repositories/country.repository')
 const directorRepo = require('../repositories/director.repository')
 const actorRepo = require('../repositories/actor.repository')
 const paginationService = require('../utils/pagination.service')
+const commentRepo = require('../repositories/comment.repository')
+const rateRepo = require('../repositories/rate.repository')
+
 
 const getMovies = async ({ current_page, limit_page, category_id, country_id, year, type, status }) => {
 	const total_item = await movieRepo.count()
@@ -43,6 +46,12 @@ const getMovieDetail = async (slug) => {
 	const countries = await countryRepo.findByMovieId(movie.id)
 	const directors = await directorRepo.findByMovieId(movie.id)
 	const actors = await actorRepo.findByMovieId(movie.id)
+
+	const rates = await rateRepo.findByMovieId(movie.id)
+	const total_rate = rates.length
+	const total_rate_score = rates.reduce((sum, rate) => sum + rate.rate, 0)
+	const rate_score = total_rate > 0 ? total_rate_score / total_rate : 0
+
 	const uniqBy = (a, key) => {
 		var seen = {};
 		return a.filter(function (item) {
@@ -53,10 +62,11 @@ const getMovieDetail = async (slug) => {
 
 	const data = {
 		...movie,
+		rate: Math.round(rate_score * 10) / 10,
 		categories,
 		countries,
 		directors,
-		actors: uniqBy(actors, JSON.stringify)
+		actors: uniqBy(actors, JSON.stringify),
 	}
 	return {
 		status: 200,
@@ -273,11 +283,124 @@ const deleteMovie = async (id) => {
 	}
 }
 
+const getComments = async ({ current_page, limit_page, slug, movie_id, user_id }) => {
+	const limit = limit_page
+	const offset = (current_page - 1) * limit_page
+
+	const total_item = await commentRepo.count({ slug, movie_id, user_id })
+	const data = await commentRepo.all({ limit, offset, slug, movie_id, user_id })
+
+	return {
+		status: 200,
+		message: 'Get comments successfully',
+		elements: paginationService.to_form({
+			current_page,
+			total_item,
+			data,
+			limit
+		})
+	}
+}
+
+const addComment = async ({ movie_id, user_id, content }) => {
+	const isCreated = commentRepo.create({ movie_id, user_id, content })
+	return {
+		status: isCreated ? 200 : 401,
+		message: isCreated ? 'Add comment successfully' : 'Cannot add comment'
+	}
+}
+
+const updateComment = async ({ comment_id, user_id, content }) => {
+	const comment = await commentRepo.findOneById(comment_id)
+	if (!comment) {
+		return {
+			status: 404,
+			message: 'Comment not found'
+		}
+	}
+
+	if (comment.user_id !== user_id) {
+		return {
+			status: 403,
+			message: 'Forbidden'
+		}
+	}
+
+	const isUpdated = await commentRepo.update({ comment_id, content })
+
+	return {
+		status: isUpdated ? 200 : 401,
+		message: isUpdated ? 'Update comment successfully' : 'Cannot update comment'
+	}
+}
+
+const deleteComment = async ({ comment_id, user_id }) => {
+	const comment = await commentRepo.findOneById(comment_id)
+	if (!comment) {
+		return {
+			status: 404,
+			message: 'Comment not found'
+		}
+	}
+
+	if (comment.user_id !== user_id) {
+		const roles = await roleRepo.getRoles(res.data.id)
+
+		if (roles.some(role => role.slug === 'admin')) {
+			const isDeleted = await commentRepo.delete({ comment_id })
+
+			return {
+				status: isDeleted ? 200 : 401,
+				message: isDeleted ? 'Delete comment successfully' : 'Cannot delete comment'
+			}
+		}
+		return {
+			status: 403,
+			message: 'Forbidden'
+		}
+	}
+
+	const isDeleted = await commentRepo.delete({ comment_id })
+
+	return {
+		status: isDeleted ? 200 : 401,
+		message: isDeleted ? 'Delete comment successfully' : 'Cannot delete comment'
+	}
+}
+
+const rateMovie = async ({ movie_id, user_id, score }) => {
+	const isRated = await rateRepo.isRated({ movie_id, user_id })
+	let isCreated = false
+	if (isRated) {
+		isCreated = await rateRepo.update({ movie_id, user_id, score })
+	}
+	else {
+		isCreated = await rateRepo.create({ movie_id, user_id, score })
+	}
+
+	if (!isCreated) {
+		return {
+			status: 401,
+			message: 'Cannot rate movie'
+		}
+	}
+
+	return {
+		status: 200,
+		message: 'Rate movie successfully'
+	}
+}
+
 module.exports = {
 	getMovies,
 	getMovieDetail,
 	getEpisodes,
 	addMovie,
 	updateMovie,
-	deleteMovie
+	deleteMovie,
+	getComments,
+	addComment,
+	updateComment,
+	deleteComment,
+	rateMovie
 }
