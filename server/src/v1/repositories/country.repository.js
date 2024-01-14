@@ -54,11 +54,61 @@ const isMovieExist = async ({ movie_id, country_id }) => {
 	return (await query(`select * from movies_countries where movie_id = ${movie_id} and country_id = ${country_id} and is_deleted = false`)).length > 0
 }
 
+const all = async ({ limit, offset }) => {
+	return await query(`
+		select c.id, c.name, c.slug, count(mc.movie_id) as count, c.modified from countries as c
+		left join movies_countries as mc on c.id = mc.country_id
+		where c.is_deleted = false 
+		group by c.id
+		limit ${limit} offset ${offset}`)
+}
+
+const count = async () => {
+	return (await query(`select count(*) as total from countries where is_deleted = false`))[0].total
+}
+
+const search = async ({ limit, offset, name, slug }) => {
+	const whereClauses = [
+		`c.is_deleted = false`
+	]
+
+	if (name) whereClauses.push(`c.name like '%${name}%'`)
+	if (slug) whereClauses.push(`c.slug like '%${slug}%'`)
+
+	const textQuery = `
+		select c.id, c.name, c.slug, count(mc.movie_id) as count, c.modified from countries as c
+		left join movies_countries as mc on c.id = mc.country_id
+		where ${whereClauses.join(' and ')}
+		group by c.id
+		limit ${limit} offset ${offset}`
+
+	return await query(textQuery)
+}
+
+const countSearch = async ({ name, slug }) => {
+	const whereClauses = [
+		`c.is_deleted = false`
+	]
+
+	if (name) whereClauses.push(`c.name like '%${name}%'`)
+	if (slug) whereClauses.push(`c.slug like '%${slug}%'`)
+
+	const textQuery = `
+		select count(*) as total from countries as c
+		where ${whereClauses.join(' and ')}`
+
+	return (await query(textQuery))[0].total
+}
+
 module.exports = {
 	findByMovieId,
 	findOneBySlug,
 	create,
 	addMovie,
 	removeMovie,
-	isMovieExist
+	isMovieExist,
+	all,
+	count,
+	search,
+	countSearch
 }

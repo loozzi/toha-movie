@@ -16,4 +16,6 @@ router.use('/category', require('./routes/category.route'))
 
 router.use('/director', require('./routes/director.route'))
 
+router.use('/country', require('./routes/country.route'))
+
 module.exports = router
