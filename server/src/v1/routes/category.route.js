@@ -21,4 +21,8 @@ router.put('/update', middleware.isLoggingIn, middleware.isAdmin, categoryContro
 // Delete a category
 router.delete('/delete', middleware.isLoggingIn, middleware.isAdmin, categoryController.delete)
 
+// GET /api/v1/category/search
+// Search categories
+router.get('/search', paginationService.midderware, categoryController.search)
+
 module.exports = router

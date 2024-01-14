@@ -72,9 +72,30 @@ const remove = async ({ id }) => {
 	}
 }
 
+const search = async ({ name, slug, current_page, limit_page }) => {
+	const limit = limit_page
+	const offset = (current_page - 1) * limit
+
+	const totalItem = await categoryRepo.countSearch({ name, slug })
+
+	const categories = await categoryRepo.search({ name, slug, limit, offset })
+
+	return {
+		status: 200,
+		message: 'Success',
+		elements: paginationService.to_form({
+			current_page,
+			limit,
+			total_item: totalItem,
+			data: categories
+		})
+	}
+}
+
 module.exports = {
 	all,
 	create,
 	update,
-	delete: remove
+	delete: remove,
+	search
 }

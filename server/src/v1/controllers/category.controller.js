@@ -77,5 +77,27 @@ module.exports = {
 				error: err
 			})
 		}
+	},
+	search: async (req, res, next) => {
+		try {
+			const { name, slug } = req.query
+			const { current_page, limit_page } = res.pagination
+
+			if (!name && !slug) {
+				return res.json({
+					status: 400,
+					message: 'Required fields are missing'
+				})
+			}
+
+			const resp = await categoryService.search({ name, slug, current_page, limit_page })
+			res.json(resp)
+		} catch (err) {
+			res.json({
+				status: 500,
+				message: 'Internal Server Error',
+				error: err
+			})
+		}
 	}
 }

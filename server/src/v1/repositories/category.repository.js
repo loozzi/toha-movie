@@ -90,6 +90,39 @@ const count = async () => {
 	return (await query(`select count(*) as count from categories where is_deleted = false`))[0].count
 }
 
+const search = async ({ name, slug, limit, offset }) => {
+	const whereClauses = [
+		`is_deleted = false`
+	]
+
+	if (name) whereClauses.push(`name like '%${name}%'`)
+	if (slug) whereClauses.push(`slug like '%${slug}%'`)
+
+	const textQuery =
+		`select * from categories
+		where ${whereClauses.join(' and ')}
+		limit ${limit} offset ${offset};`
+
+	return await query(textQuery)
+
+}
+
+const countSearch = async ({ name, slug }) => {
+	const whereClauses = [
+		`is_deleted = false`
+	]
+
+	if (name) whereClauses.push(`name like '%${name}%'`)
+	if (slug) whereClauses.push(`slug like '%${slug}%'`)
+
+	const textQuery =
+		`select count(*) as count from categories
+		where ${whereClauses.join(' and ')};`
+
+	return (await query(textQuery))[0].count
+
+}
+
 module.exports = {
 	findByMovieId,
 	findOneBySlug,
@@ -101,5 +134,6 @@ module.exports = {
 	all,
 	update,
 	remove,
-	count
+	count,
+	search, countSearch
 }
