@@ -16,17 +16,17 @@ module.exports = {
 		}
 	},
 	getMovieDetail: async (req, res, next) => {
-		try {
-			const { slug } = req.query
-			const resp = await movieService.getMovieDetail(slug)
-			res.json(resp)
-		} catch (err) {
-			res.json({
-				status: 500,
-				message: 'Internal Server Error',
-				error: err
-			})
-		}
+		// try {
+		const { slug, user_id } = req.query
+		const resp = await movieService.getMovieDetail({ slug, user_id })
+		res.json(resp)
+		// } catch (err) {
+		// 	res.json({
+		// 		status: 500,
+		// 		message: 'Internal Server Error',
+		// 		error: err
+		// 	})
+		// }
 	},
 	getEpisodes: async (req, res, next) => {
 		try {

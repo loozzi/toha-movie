@@ -46,6 +46,37 @@ const all = async ({ limit, offset }) => {
 const count = async (data) => {
 	return (await query(`select count(*) as total from users where is_deleted = false`))[0].total
 }
+
+const findOneMarkMovie = async ({ user_id, movie_id }) => {
+	return (await query(
+		`select user_id, movie_id, type 
+		from users_movies where user_id = ${user_id} 
+		and movie_id = ${movie_id} and is_deleted = false`
+	))[0]
+}
+
+const updateMarkMovie = async ({ user_id, movie_id, type }) => {
+	await query(
+		`update users_movies set ? 
+		where user_id = ${user_id} and movie_id = ${movie_id} 
+		and is_deleted = false`, { type }
+	)
+}
+
+const markMovie = async ({ user_id, movie_id, type }) => {
+	try {
+		const isMarked = await findOneMarkMovie({ user_id, movie_id })
+		if (!!isMarked) {
+			await updateMarkMovie({ user_id, movie_id, type })
+		} else {
+			await query(`insert into users_movies set ?`, { user_id, movie_id, type })
+		}
+		return true
+	} catch (err) {
+		return false
+	}
+}
+
 module.exports = {
 	findOneById,
 	findOneByUsername,
@@ -54,5 +85,7 @@ module.exports = {
 	delete: remove,
 	all,
 	count,
-	update
+	update,
+	markMovie,
+	findOneMarkMovie
 }

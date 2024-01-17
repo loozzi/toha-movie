@@ -6,6 +6,7 @@ const actorRepo = require('../repositories/actor.repository')
 const paginationService = require('../utils/pagination.service')
 const commentRepo = require('../repositories/comment.repository')
 const rateRepo = require('../repositories/rate.repository')
+const userRepository = require('../repositories/user.repository')
 
 
 const getMovies = async ({ current_page, limit_page, category_id, country_id, year, type, status }) => {
@@ -34,7 +35,7 @@ const getMovies = async ({ current_page, limit_page, category_id, country_id, ye
 	}
 }
 
-const getMovieDetail = async (slug) => {
+const getMovieDetail = async ({ slug, user_id }) => {
 	const movie = await movieRepo.findOneBySlug(slug)
 	if (!movie) {
 		return {
@@ -46,6 +47,10 @@ const getMovieDetail = async (slug) => {
 	const countries = await countryRepo.findByMovieId(movie.id)
 	const directors = await directorRepo.findByMovieId(movie.id)
 	const actors = await actorRepo.findByMovieId(movie.id)
+	let marked = null
+	if (!!user_id) {
+		marked = await userRepository.findOneMarkMovie({ movie_id: movie.id, user_id: user_id })
+	}
 
 	const rates = await rateRepo.findByMovieId(movie.id)
 	const total_rate = rates.length
@@ -67,6 +72,7 @@ const getMovieDetail = async (slug) => {
 		countries,
 		directors,
 		actors: uniqBy(actors, JSON.stringify),
+		marked: marked
 	}
 	return {
 		status: 200,

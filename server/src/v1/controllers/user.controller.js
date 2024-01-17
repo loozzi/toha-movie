@@ -119,5 +119,27 @@ module.exports = {
 				error: err
 			})
 		}
+	},
+	markMovie: async (req, res, next) => {
+		try {
+			const { id } = res.data
+			const { movie_id, type } = req.body
+
+			if (!movie_id || !type) {
+				return res.json({
+					status: 400,
+					message: 'Required fields are missing'
+				})
+			}
+
+			const resp = await userService.markMovie({ user_id: id, movie_id, type })
+			res.json(resp)
+		} catch (err) {
+			res.json({
+				status: 500,
+				message: 'Internal Server Error',
+				error: err
+			})
+		}
 	}
 }

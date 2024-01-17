@@ -20,4 +20,6 @@ router.use('/country', require('./routes/country.route'))
 
 router.use('/actor', require('./routes/actor.route'))
 
+router.use('/history', require('./routes/history.route'))
+
 module.exports = router
