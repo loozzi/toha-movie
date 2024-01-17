@@ -113,10 +113,21 @@ const removeRole = async ({ user_id, role_id }) => {
 	}
 }
 
+const markMovie = async ({ user_id, movie_id, type }) => {
+	const isMarked = await userRepo.markMovie({ user_id, movie_id, type })
+
+	return {
+		status: isMarked ? 200 : 400,
+		message: isMarked ? 'Mark movie successfully' : 'Mark movie failed'
+
+	}
+}
+
 module.exports = {
 	changeEmail,
 	getUsers,
 	lockUser,
 	addRole,
-	removeRole
+	removeRole,
+	markMovie
 }
