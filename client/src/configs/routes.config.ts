@@ -8,6 +8,7 @@ export default {
     refreshToken: 'auth/refresh-token',
     resetPassword: 'auth/reset-password'
   },
+  home: '',
   private: '/*',
   public: '/*',
   admin: '/admin/*'

@@ -6,3 +6,12 @@ export interface User {
 
   [key: string]: any
 }
+
+export interface AuthPayload {
+  email: string
+  password: string
+}
+
+export interface RegisterPayload extends AuthPayload {
+  username: string
+}

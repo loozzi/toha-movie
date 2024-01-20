@@ -1,12 +1,21 @@
-import './App.css'
-import { useEffect } from 'react'
-import api from '~/services'
+import '~/App.css'
+import { Route, Routes, useLocation } from 'react-router'
+import routesConfig from '~/configs/routes.config'
+import PublicLayout from '~/pages/public'
+import LoginPage from '~/pages/auth/login'
 
 function App() {
-  useEffect(() => {
-    api.token.generate({ refresh_token: 'refresh_token' })
-  }, [])
-  return <div>Home</div>
+  const location = useLocation()
+
+  return (
+    <div>
+      <Routes location={location}>
+        <Route path={routesConfig.public} element={<PublicLayout />}>
+          <Route path={routesConfig.auth.login} element={<LoginPage />} />
+        </Route>
+      </Routes>
+    </div>
+  )
 }
 
 export default App
