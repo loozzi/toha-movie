@@ -15,7 +15,9 @@ app.use(cookieParser())
 app.use(morgan('common'))
 app.use(cors({
 	credentials: true,
-	origin: '*',
+	origin: function (origin, callback) {
+		callback(null, true);
+	},
 	methods: ['GET', 'POST', 'PUT', 'DELETE'],
 }))
 
