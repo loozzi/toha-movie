@@ -4,7 +4,6 @@ import { Outlet } from 'react-router'
 const PublicLayout = () => {
   return (
     <Fragment>
-      <div>Public Layout</div>
       <Outlet />
     </Fragment>
   )

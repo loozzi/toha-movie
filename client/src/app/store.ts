@@ -1,6 +1,7 @@
 import { combineReducers, configureStore } from '@reduxjs/toolkit'
 import createSagaMiddleware from '@redux-saga/core'
 
+import rootSaga from './root.saga'
 import authReducer from '~/hooks/auth/auth.slice'
 
 const sagaMiddleware = createSagaMiddleware()
@@ -16,3 +17,5 @@ export const store = configureStore({
       thunk: true
     }).concat(sagaMiddleware)
 })
+
+sagaMiddleware.run(rootSaga)
