@@ -9,6 +9,11 @@ const generate = async ({ refresh_token }: { refresh_token: string }): Promise<I
   })
 }
 
+const logout = async (): Promise<IResponse<undefined>> => {
+  return await client.get(api.route.auth.logout)
+}
+
 export default {
-  generate
+  generate,
+  logout
 }
