@@ -10,13 +10,8 @@ import { Token } from '~/models/token'
 import { IResponse } from '~/models/IResponse'
 
 function* handleLogin(payload: AuthPayload) {
-  yield put(authActions.login())
+  yield put(authActions.login(payload))
   try {
-    yield call(notification.info, {
-      message: 'Đăng nhập',
-      description: 'Đang đăng nhập...'
-    })
-
     const fetch = api.auth
       .login(payload)
       .then((resp: IResponse<Token>) => resp)
@@ -33,7 +28,7 @@ function* handleLogin(payload: AuthPayload) {
         message: 'Đăng nhập',
         description: 'Đăng nhập thành công. Chào mừng trở lại'
       })
-      const { accessToken, refreshToken } = resp.elements!.user
+      const { accessToken, refreshToken } = resp.elements!
       localStorage.setItem('access_token', accessToken)
       localStorage.setItem('refresh_token', refreshToken)
       yield call(history.push, routesConfig.home)
@@ -86,7 +81,7 @@ function* handleLogout() {
 }
 
 function* handleRegister(payload: RegisterPayload) {
-  yield put(authActions.login())
+  yield put(authActions.login(payload))
   try {
     const fetch: Promise<IResponse<Token>> = api.auth
       .register(payload)
@@ -157,9 +152,15 @@ function* watchLoginFlow() {
       yield take(authActions.logout.type)
       yield call(handleLogout)
     } else {
-      const { type, payload } = yield take(authActions.login.type)
-      if (type === 'register') yield call(handleRegister, payload)
-      else yield call(handleLogin, payload)
+      const { type, payload } = yield take([authActions.register.type, authActions.login.type])
+      switch (type) {
+        case authActions.register.type:
+          yield call(handleRegister, payload)
+          break
+        case authActions.login.type:
+          yield call(handleLogin, payload)
+          break
+      }
     }
   }
 }

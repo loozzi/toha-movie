@@ -1,11 +1,16 @@
-import { Button, Checkbox, Flex, Form, Input } from 'antd'
-// import { useAppDispatch, useAppSelector } from '~/app/hook'
-// import { selectIsAuthenticated } from '~/hooks/auth/auth.slice'
+import { Button, Flex, Form, Input, Spin, notification } from 'antd'
+import { LoadingOutlined } from '@ant-design/icons'
+import { useAppDispatch, useAppSelector } from '~/app/hook'
+import { authActions, selectIsAuthenticated } from '~/hooks/auth/auth.slice'
 import { AuthPayload } from '~/models/user'
+import { useEffect } from 'react'
+import { history } from '~/configs/history'
+import routesConfig from '~/configs/routes.config'
+import { Link } from 'react-router-dom'
 
 const LoginPage = () => {
-  // const dispatch = useAppDispatch()
-  // const isAuthenticated = useAppSelector(selectIsAuthenticated)
+  const dispatch = useAppDispatch()
+  const isAuthenticated = useAppSelector(selectIsAuthenticated)
 
   const onFinish = (values: AuthPayload) => {
     const payload: AuthPayload = {
@@ -13,17 +18,34 @@ const LoginPage = () => {
       password: values.password
     }
 
-    // dispatch({ type: 'login', payload })
+    notification.open({
+      icon: <Spin indicator={<LoadingOutlined style={{ fontSize: 24 }} spin />} />,
+      message: 'Đăng nhập',
+      description: 'Vui lòng chờ trong giây lát',
+      duration: 0.5
+    })
+    setTimeout(() => {
+      dispatch(authActions.login(payload))
+    }, 450)
   }
 
-  const onFinishFailed = (errorInfo: any) => {
-    console.log('Failed:', errorInfo)
+  const onFinishFailed = () => {
+    notification.warning({
+      message: 'Đăng nhập',
+      description: 'Vui lòng kiểm tra lại thông tin đăng nhập'
+    })
   }
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      history.push(routesConfig.home)
+    }
+  }, [isAuthenticated])
 
   return (
     <Flex style={{ width: '100%', padding: 16 }} justify='center'>
       <Form
-        name='basic'
+        name='login'
         labelCol={{ span: 8 }}
         wrapperCol={{ span: 16 }}
         style={{ maxWidth: 600, flex: 1 }}
@@ -51,8 +73,8 @@ const LoginPage = () => {
           <Input.Password size='large' />
         </Form.Item>
 
-        <Form.Item name='remember' valuePropName='checked' wrapperCol={{ offset: 8, span: 16 }}>
-          <Checkbox>Lưu phiên đăng nhập</Checkbox>
+        <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
+          <Link to={'/' + routesConfig.auth.register}>Chưa có tài khoản? Đăng ký tại đây</Link>
         </Form.Item>
 
         <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
