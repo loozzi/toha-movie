@@ -122,7 +122,7 @@ const register = async ({ username, email, password }) => {
 
 	const { accessToken, refreshToken } = await tokenService.generate(user)
 	return {
-		code: 201,
+		status: 201,
 		message: 'Register successfully',
 		elements: {
 			accessToken,
