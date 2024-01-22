@@ -22,11 +22,11 @@ const headerSlice = createSlice({
     },
     fetchCategorySuccess(state, actions: PayloadAction<Category[]>) {
       state.loading = false
-      state.categories = actions.payload
+      state.categories = actions.payload.sort((a, b) => a.slug.localeCompare(b.slug))
     },
     fetchCountrySuccess(state, actions: PayloadAction<Country[]>) {
       state.loading = false
-      state.countries = actions.payload
+      state.countries = actions.payload.sort((a, b) => a.slug.localeCompare(b.slug))
     },
     fetchCategoryFailed(state) {
       state.loading = false
