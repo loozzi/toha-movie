@@ -1,37 +1,67 @@
 {
-  "hash": "f6d5b920",
+  "hash": "63987be3",
   "configHash": "02c691f8",
-  "lockfileHash": "327e5d24",
-  "browserHash": "2dcd438c",
+  "lockfileHash": "bebc249c",
+  "browserHash": "29ecfecd",
   "optimized": {
     "react/jsx-dev-runtime": {
       "src": "../../node_modules/react/jsx-dev-runtime.js",
       "file": "react_jsx-dev-runtime.js",
-      "fileHash": "12f47864",
+      "fileHash": "7a5abe79",
       "needsInterop": true
     },
     "react": {
       "src": "../../node_modules/react/index.js",
       "file": "react.js",
-      "fileHash": "4ca1e1ab",
+      "fileHash": "af4ed379",
       "needsInterop": true
     },
     "react-dom/client": {
       "src": "../../node_modules/react-dom/client.js",
       "file": "react-dom_client.js",
-      "fileHash": "2004c37b",
+      "fileHash": "06d4f25e",
       "needsInterop": true
+    },
+    "react-redux": {
+      "src": "../../node_modules/react-redux/dist/react-redux.mjs",
+      "file": "react-redux.js",
+      "fileHash": "73fef29e",
+      "needsInterop": false
     },
     "react-router-dom": {
       "src": "../../node_modules/react-router-dom/dist/index.js",
       "file": "react-router-dom.js",
-      "fileHash": "c6a880a1",
+      "fileHash": "d035b65b",
+      "needsInterop": false
+    },
+    "react-router": {
+      "src": "../../node_modules/react-router/dist/index.js",
+      "file": "react-router.js",
+      "fileHash": "679a8152",
+      "needsInterop": false
+    },
+    "antd": {
+      "src": "../../node_modules/antd/es/index.js",
+      "file": "antd.js",
+      "fileHash": "863f3c0a",
+      "needsInterop": false
+    },
+    "@ant-design/icons": {
+      "src": "../../node_modules/@ant-design/icons/es/index.js",
+      "file": "@ant-design_icons.js",
+      "fileHash": "01971c58",
       "needsInterop": false
     }
   },
   "chunks": {
+    "chunk-R7LYUP7E": {
+      "file": "chunk-R7LYUP7E.js"
+    },
     "chunk-UWZXFKA6": {
       "file": "chunk-UWZXFKA6.js"
+    },
+    "chunk-JFSF44FS": {
+      "file": "chunk-JFSF44FS.js"
     },
     "chunk-UPDK7Z2H": {
       "file": "chunk-UPDK7Z2H.js"
