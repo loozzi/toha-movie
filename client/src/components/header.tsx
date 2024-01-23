@@ -4,7 +4,6 @@ import {
   SettingOutlined,
   HomeOutlined,
   FlagOutlined,
-  BulbOutlined,
   FolderOutlined,
   FolderAddOutlined,
   LoginOutlined,
