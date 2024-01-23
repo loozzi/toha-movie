@@ -18,6 +18,7 @@ export default {
   category: 'the-loai/:slug',
   country: 'quoc-gia/:slug',
   setting: 'cai-dat',
+  search: 'tim-kiem',
   home: '/',
   private: '/*',
   public: '/*',

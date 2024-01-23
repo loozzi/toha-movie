@@ -7,6 +7,7 @@ import {
   LoginOutlined,
   LogoutOutlined,
   MenuOutlined,
+  SearchOutlined,
   SettingOutlined,
   ShopOutlined
 } from '@ant-design/icons'
@@ -15,10 +16,10 @@ import { Header } from 'antd/es/layout/layout'
 import { Fragment, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '~/app/hook'
-import { selectIsAuthenticated } from '~/hooks/auth/auth.slice'
-import { selectCategories, selectCountries, headerActions } from '~/hooks/header/header.slice'
 import logo from '~/assets/imgs/logo.png'
 import routesConfig from '~/configs/routes.config'
+import { selectIsAuthenticated } from '~/hooks/auth/auth.slice'
+import { headerActions, selectCategories, selectCountries } from '~/hooks/header/header.slice'
 
 const HeaderMobileComp = () => {
   const dispatch = useAppDispatch()
@@ -111,6 +112,9 @@ const HeaderMobileComp = () => {
         >
           <Menu.Item key='home' icon={<HomeOutlined />}>
             <Link to='/'>Trang Chủ</Link>
+          </Menu.Item>
+          <Menu.Item key='search' icon={<SearchOutlined />}>
+            <Link to={`/${routesConfig.search}`}>Tìm Kiếm</Link>
           </Menu.Item>
           <Menu.SubMenu key='category' icon={<AppstoreOutlined />} title='Thể Loại'>
             <Flex style={{ flexWrap: 'wrap' }}>{categories.length && SubMenuCategories}</Flex>

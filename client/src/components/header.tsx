@@ -1,24 +1,25 @@
-import { Flex, Menu } from 'antd'
 import {
   AppstoreOutlined,
-  SettingOutlined,
-  HomeOutlined,
   FlagOutlined,
-  FolderOutlined,
   FolderAddOutlined,
+  FolderOutlined,
+  HomeOutlined,
   LoginOutlined,
   LogoutOutlined,
+  SearchOutlined,
+  SettingOutlined,
   ShopOutlined
 } from '@ant-design/icons'
+import { Flex, Menu } from 'antd'
 import { Fragment, useEffect } from 'react'
 
-import logo from '~/assets/imgs/logo.png'
-import { useAppDispatch, useAppSelector } from '~/app/hook'
-import { headerActions, selectCategories, selectCountries } from '~/hooks/header/header.slice'
-import { Link } from 'react-router-dom'
-import routesConfig from '~/configs/routes.config'
 import { Header } from 'antd/es/layout/layout'
+import { Link } from 'react-router-dom'
+import { useAppDispatch, useAppSelector } from '~/app/hook'
+import logo from '~/assets/imgs/logo.png'
+import routesConfig from '~/configs/routes.config'
 import { selectIsAuthenticated } from '~/hooks/auth/auth.slice'
+import { headerActions, selectCategories, selectCountries } from '~/hooks/header/header.slice'
 
 const HeaderComp = () => {
   const dispatch = useAppDispatch()
@@ -97,6 +98,16 @@ const HeaderComp = () => {
             {SubMenuCountries}
           </Flex>
         </Menu.SubMenu>
+        <Menu.Item
+          key='search'
+          icon={<SearchOutlined />}
+          style={{
+            position: 'absolute',
+            right: 16
+          }}
+        >
+          <Link to={`/${routesConfig.search}`}>Tìm Kiếm</Link>
+        </Menu.Item>
       </Menu>
     </Header>
   )
