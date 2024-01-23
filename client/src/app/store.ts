@@ -3,11 +3,13 @@ import createSagaMiddleware from '@redux-saga/core'
 
 import rootSaga from './root.saga'
 import authReducer from '~/hooks/auth/auth.slice'
+import headerReducer from '~/hooks/header/header.slice'
 
 const sagaMiddleware = createSagaMiddleware()
 
 const rootReducer = combineReducers({
-  auth: authReducer
+  auth: authReducer,
+  header: headerReducer
 })
 
 export const store = configureStore({
