@@ -6,9 +6,12 @@ import {
   FlagOutlined,
   BulbOutlined,
   FolderOutlined,
-  FolderAddOutlined
+  FolderAddOutlined,
+  LoginOutlined,
+  LogoutOutlined,
+  ShopOutlined
 } from '@ant-design/icons'
-import { useEffect } from 'react'
+import { Fragment, useEffect } from 'react'
 
 import logo from '~/assets/imgs/logo.png'
 import { useAppDispatch, useAppSelector } from '~/app/hook'
@@ -16,11 +19,13 @@ import { headerActions, selectCategories, selectCountries } from '~/hooks/header
 import { Link } from 'react-router-dom'
 import routesConfig from '~/configs/routes.config'
 import { Header } from 'antd/es/layout/layout'
+import { selectIsAuthenticated } from '~/hooks/auth/auth.slice'
 
 const HeaderComp = () => {
   const dispatch = useAppDispatch()
   const categories = useAppSelector(selectCategories)
   const countries = useAppSelector(selectCountries)
+  const isAuthenticated = useAppSelector(selectIsAuthenticated)
 
   const SubMenuCategories = categories.map((category) => (
     <Menu.Item key={category.slug} style={{ flex: '1 0 25%' }}>
@@ -71,12 +76,23 @@ const HeaderComp = () => {
         <Menu.Item key='type:single' icon={<FolderOutlined />}>
           <Link to={`/${routesConfig.movie.single}`}>Phim Lẻ</Link>
         </Menu.Item>
-        <Menu.Item key='chieurap' icon={<BulbOutlined />}>
+        <Menu.Item key='chieurap' icon={<ShopOutlined />}>
           <Link to={`/${routesConfig.movie.theater}`}>Phim Chiếu Rạp</Link>
         </Menu.Item>
-        <Menu.Item key='settings' icon={<SettingOutlined />}>
-          <Link to={`/${routesConfig.setting}`}>Cài Đặt</Link>
-        </Menu.Item>
+        {isAuthenticated ? (
+          <Fragment>
+            <Menu.Item key='settings' icon={<SettingOutlined />}>
+              <Link to={`/${routesConfig.setting}`}>Cài Đặt</Link>
+            </Menu.Item>
+            <Menu.Item key='logout' icon={<LogoutOutlined />}>
+              <Link to={`/${routesConfig.auth.logout}`}>Đăng Xuất</Link>
+            </Menu.Item>
+          </Fragment>
+        ) : (
+          <Menu.Item key='login' icon={<LoginOutlined />}>
+            <Link to={`/${routesConfig.auth.login}`}>Đăng Nhập</Link>
+          </Menu.Item>
+        )}
         <Menu.SubMenu key='hide'>
           <Flex key={'hide:item'} style={{ flexWrap: 'wrap', width: 600 }}>
             {SubMenuCountries}
