@@ -16,3 +16,11 @@ export interface PaginationParams {
 
   [key: string]: any
 }
+
+export interface PaginationMovieParams extends PaginationParams {
+  country_id?: number
+  status?: 'completed' | 'ongoing' | 'trailer' | ''
+  year?: number
+  category?: number
+  type?: 'single' | 'series' | 'hoathinh' | 'tvshows' | ''
+}
