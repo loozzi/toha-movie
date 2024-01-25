@@ -25,7 +25,14 @@ const MovieSlider = (payload: MovieSliderProps) => {
 
   return (
     <>
-      <Divider orientation='left' plain>
+      <Divider
+        orientation='left'
+        plain
+        style={{
+          fontSize: 20,
+          fontWeight: 600
+        }}
+      >
         {title}
       </Divider>
       <div style={{ maxWidth: itemPerSlide * 212, width: '100%', position: 'relative' }}>
@@ -34,7 +41,7 @@ const MovieSlider = (payload: MovieSliderProps) => {
             fontSize: 40,
             position: 'absolute',
             top: '50%',
-            right: 14,
+            right: 20,
             transform: 'translateY(-50%)',
             zIndex: 1,
             boxShadow: '0 0 10px 0 rgba(255, 255, 255, 0.8)'
@@ -46,14 +53,14 @@ const MovieSlider = (payload: MovieSliderProps) => {
             fontSize: 40,
             position: 'absolute',
             top: '50%',
-            left: 14,
+            left: 8,
             transform: 'translateY(-50%)',
             zIndex: 1,
             boxShadow: '0 0 10px 0 rgba(255, 255, 255, 0.8)'
           }}
           onClick={() => handleSlide('prev')}
         />
-        <Carousel ref={carouselRef} infinite autoplay slidesToShow={itemPerSlide}>
+        <Carousel dotPosition='top' ref={carouselRef} infinite autoplay slidesToShow={itemPerSlide}>
           {movies.map((movie) => (
             <div>
               <MovieCard key={movie.id} loading={loading} movie={movie} />

@@ -23,4 +23,5 @@ export interface PaginationMovieParams extends PaginationParams {
   year?: number
   category?: number
   type?: 'single' | 'series' | 'hoathinh' | 'tvshows' | ''
+  chieurap?: 0 | 1 | undefined
 }

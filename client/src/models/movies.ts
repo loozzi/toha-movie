@@ -6,6 +6,10 @@ export interface Movie {
   type: string
   status: string
   year: number
+  episode_current: string
+  quality: string
+  lang: string
+  chieurap: number
   category: string
   country: string
   view: number
