@@ -28,7 +28,7 @@ const MovieSlider = (payload: MovieSliderProps) => {
       <Divider orientation='left' plain>
         {title}
       </Divider>
-      <div style={{ maxWidth: itemPerSlide * 208, width: '100%', position: 'relative' }}>
+      <div style={{ maxWidth: itemPerSlide * 212, width: '100%', position: 'relative' }}>
         <CaretRightOutlined
           style={{
             fontSize: 40,
