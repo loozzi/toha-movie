@@ -39,7 +39,7 @@ const count = async () => {
 	return (await query(`select count(*) as total from movies where is_deleted = false`))[0].total
 }
 
-const all = async ({ limit, offset, category_id, country_id, year, type, status }) => {
+const all = async ({ limit, offset, category_id, country_id, year, type, status, order_by }) => {
 	const whereClauses = [
 		`m.is_deleted = false`,
 		`mc.is_deleted = false`,
@@ -55,6 +55,7 @@ const all = async ({ limit, offset, category_id, country_id, year, type, status 
 
 	const textQuery =
 		`select m.id, m.name, m.origin_name, m.slug, m.type, m.status, m.year, 
+			m.episode_current, m.quality, m.lang, m.year, m.chieurap,
 			group_concat(distinct c.name separator ', ') as category, 
 			group_concat(distinct ct.name separator ', ') as country, 
 			m.view, m.thumb_url, m.modified from movies m
@@ -64,6 +65,7 @@ const all = async ({ limit, offset, category_id, country_id, year, type, status 
 		inner join countries ct on mct.country_id = ct.id
 		where ${whereClauses.filter(e => e.length).join(' and ')}
 		group by m.id
+		order by m.modified ${order_by ? order_by : 'desc'}
 		limit ${limit} offset ${offset}`
 	return await query(textQuery)
 }
