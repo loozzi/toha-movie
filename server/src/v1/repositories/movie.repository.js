@@ -39,7 +39,7 @@ const count = async () => {
 	return (await query(`select count(*) as total from movies where is_deleted = false`))[0].total
 }
 
-const all = async ({ limit, offset, category_id, country_id, year, type, status, order_by }) => {
+const all = async ({ limit, offset, category_id, country_id, year, type, status, order_by, chieurap }) => {
 	const whereClauses = [
 		`m.is_deleted = false`,
 		`mc.is_deleted = false`,
@@ -51,6 +51,7 @@ const all = async ({ limit, offset, category_id, country_id, year, type, status,
 		year ? `year = ${year}` : '',
 		type ? `type = '${type}'` : '',
 		status ? `status = '${status}'` : '',
+		chieurap ? `chieurap = '${chieurap}'` : ''
 	]
 
 	const textQuery =
