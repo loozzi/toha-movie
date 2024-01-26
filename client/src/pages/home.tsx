@@ -1,6 +1,5 @@
-import { Flex, Space } from 'antd'
+import { Flex } from 'antd'
 import { useEffect } from 'react'
-import { useMediaQuery } from 'react-responsive'
 import { useAppDispatch, useAppSelector } from '~/app/hook'
 import MovieSlider from '~/components/movies/slider'
 import { homeActions, selectCartoons, selectSeries, selectSingles, selectTvShows } from '~/hooks/home/home.slice'
@@ -11,7 +10,6 @@ const HomePage = () => {
   const singles = useAppSelector(selectSingles)
   const cartoons = useAppSelector(selectCartoons)
   const tvShows = useAppSelector(selectTvShows)
-  const is = useMediaQuery({ maxWidth: 1224 })
 
   useEffect(() => {
     dispatch(homeActions.fetchData())

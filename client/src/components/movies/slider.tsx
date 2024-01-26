@@ -14,8 +14,29 @@ const SIZE_OF_MOVIE_CARD = 212
 
 const MovieSlider = (payload: MovieSliderProps) => {
   const { loading, movies, title } = payload
-  const [itemPerSlide, setItemPerSlide] = useState<number>(5)
+  const [itemPerSlide, setItemPerSlide] = useState<number>(
+    Math.floor((Math.min(window.innerWidth, 1600) - 24) / SIZE_OF_MOVIE_CARD)
+  )
   const carouselRef = useRef<any>(null)
+
+  const emptyMovie: Movie = {
+    id: 0,
+    name: '',
+    origin_name: '',
+    slug: '',
+    type: '',
+    status: '',
+    year: 0,
+    episode_current: '',
+    quality: '',
+    lang: '',
+    chieurap: 0,
+    category: '',
+    country: '',
+    view: 0,
+    thumb_url: '',
+    modified: ''
+  }
 
   const handleSlide = (direction: 'next' | 'prev') => {
     if (direction === 'next') {
@@ -93,11 +114,17 @@ const MovieSlider = (payload: MovieSliderProps) => {
           }}
         >
           <Carousel dotPosition='top' ref={carouselRef} infinite autoplay slidesToShow={itemPerSlide}>
-            {movies.map((movie) => (
-              <div>
-                <MovieCard key={movie.id} loading={loading} movie={movie} />
-              </div>
-            ))}
+            {movies.length > 0
+              ? movies.map((movie) => (
+                  <div>
+                    <MovieCard key={movie.id} loading={loading} movie={movie} />
+                  </div>
+                ))
+              : [...Array(10)].map((_, index) => (
+                  <div>
+                    <MovieCard key={index} loading={loading} movie={emptyMovie} />
+                  </div>
+                ))}
           </Carousel>
         </div>
       </div>
