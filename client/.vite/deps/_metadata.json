@@ -1,55 +1,55 @@
 {
-  "hash": "63987be3",
+  "hash": "e815339d",
   "configHash": "02c691f8",
-  "lockfileHash": "bebc249c",
-  "browserHash": "29ecfecd",
+  "lockfileHash": "f4b477db",
+  "browserHash": "a7ff64db",
   "optimized": {
     "react/jsx-dev-runtime": {
       "src": "../../node_modules/react/jsx-dev-runtime.js",
       "file": "react_jsx-dev-runtime.js",
-      "fileHash": "7a5abe79",
+      "fileHash": "46ba5cd6",
       "needsInterop": true
     },
     "react": {
       "src": "../../node_modules/react/index.js",
       "file": "react.js",
-      "fileHash": "af4ed379",
+      "fileHash": "524e37eb",
       "needsInterop": true
     },
     "react-dom/client": {
       "src": "../../node_modules/react-dom/client.js",
       "file": "react-dom_client.js",
-      "fileHash": "06d4f25e",
+      "fileHash": "6e0bd09d",
       "needsInterop": true
     },
     "react-redux": {
       "src": "../../node_modules/react-redux/dist/react-redux.mjs",
       "file": "react-redux.js",
-      "fileHash": "73fef29e",
+      "fileHash": "d878de14",
       "needsInterop": false
     },
     "react-router-dom": {
       "src": "../../node_modules/react-router-dom/dist/index.js",
       "file": "react-router-dom.js",
-      "fileHash": "d035b65b",
+      "fileHash": "1f7a6605",
       "needsInterop": false
     },
     "react-router": {
       "src": "../../node_modules/react-router/dist/index.js",
       "file": "react-router.js",
-      "fileHash": "679a8152",
+      "fileHash": "f65e6876",
       "needsInterop": false
     },
     "antd": {
       "src": "../../node_modules/antd/es/index.js",
       "file": "antd.js",
-      "fileHash": "863f3c0a",
+      "fileHash": "1d1f1045",
       "needsInterop": false
     },
     "@ant-design/icons": {
       "src": "../../node_modules/@ant-design/icons/es/index.js",
       "file": "@ant-design_icons.js",
-      "fileHash": "01971c58",
+      "fileHash": "4f7f1b2d",
       "needsInterop": false
     }
   },

@@ -47,7 +47,7 @@ const HeaderComp = () => {
       style={{
         position: 'sticky',
         top: 0,
-        zIndex: 1,
+        zIndex: 10,
         width: '100%',
         padding: 0
       }}

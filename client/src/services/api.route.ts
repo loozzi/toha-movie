@@ -21,8 +21,19 @@ const country = {
   search: '/country/search'
 }
 
+const movie = {
+  all: '/movie/all',
+  detail: '/movie/detail',
+  episodes: '/movie/episodes',
+  add: '/movie/add',
+  update: '/movie/update',
+  delete: '/movie/delete',
+  rate: '/movie/rate'
+}
+
 export default {
   auth,
   category,
-  country
+  country,
+  movie
 }
