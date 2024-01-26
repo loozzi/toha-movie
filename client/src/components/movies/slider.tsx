@@ -3,6 +3,7 @@ import { Carousel, Divider } from 'antd'
 import { useEffect, useRef, useState } from 'react'
 import { Movie } from '~/models/movies'
 import MovieCard from './card'
+import { useMediaQuery } from 'react-responsive'
 
 interface MovieSliderProps {
   loading: boolean
@@ -10,14 +11,19 @@ interface MovieSliderProps {
   title: string
 }
 
-const SIZE_OF_MOVIE_CARD = 212
+const SIZE_OF_MOVIE_CARD = {
+  width: 200,
+  height: 300,
+  total_with: 212
+}
 
 const MovieSlider = (payload: MovieSliderProps) => {
   const { loading, movies, title } = payload
   const [itemPerSlide, setItemPerSlide] = useState<number>(
-    Math.floor((Math.min(window.innerWidth, 1600) - 24) / SIZE_OF_MOVIE_CARD)
+    Math.floor((Math.min(window.innerWidth, 1600) - 24) / SIZE_OF_MOVIE_CARD.total_with)
   )
   const carouselRef = useRef<any>(null)
+  const isTabletOrMobile = useMediaQuery({ maxWidth: 1224 })
 
   const emptyMovie: Movie = {
     id: 0,
@@ -47,7 +53,7 @@ const MovieSlider = (payload: MovieSliderProps) => {
   }
 
   const setWindowDimensions = () => {
-    const _itemPerSlide = Math.floor((Math.min(window.innerWidth, 1600) - 24) / SIZE_OF_MOVIE_CARD)
+    const _itemPerSlide = Math.floor((Math.min(window.innerWidth, 1600) - 24) / SIZE_OF_MOVIE_CARD.total_with)
     setItemPerSlide(_itemPerSlide)
   }
 
@@ -57,6 +63,19 @@ const MovieSlider = (payload: MovieSliderProps) => {
       window.removeEventListener('resize', setWindowDimensions)
     }
   }, [])
+
+  useEffect(() => {
+    if (isTabletOrMobile) {
+      SIZE_OF_MOVIE_CARD.total_with = 150
+      SIZE_OF_MOVIE_CARD.width = 140
+      SIZE_OF_MOVIE_CARD.height = 210
+    } else {
+      SIZE_OF_MOVIE_CARD.total_with = 212
+      SIZE_OF_MOVIE_CARD.width = 200
+      SIZE_OF_MOVIE_CARD.height = 300
+    }
+    setWindowDimensions()
+  }, [isTabletOrMobile])
 
   return (
     <div
@@ -80,7 +99,7 @@ const MovieSlider = (payload: MovieSliderProps) => {
       </Divider>
       <div
         style={{
-          width: itemPerSlide * SIZE_OF_MOVIE_CARD,
+          width: itemPerSlide * SIZE_OF_MOVIE_CARD.total_with,
           position: 'relative'
         }}
       >
@@ -117,12 +136,12 @@ const MovieSlider = (payload: MovieSliderProps) => {
             {movies.length > 0
               ? movies.map((movie) => (
                   <div>
-                    <MovieCard key={movie.id} loading={loading} movie={movie} />
+                    <MovieCard size={SIZE_OF_MOVIE_CARD} key={movie.id} loading={loading} movie={movie} />
                   </div>
                 ))
               : [...Array(10)].map((_, index) => (
                   <div>
-                    <MovieCard key={index} loading={loading} movie={emptyMovie} />
+                    <MovieCard size={SIZE_OF_MOVIE_CARD} key={index} loading={loading} movie={emptyMovie} />
                   </div>
                 ))}
           </Carousel>

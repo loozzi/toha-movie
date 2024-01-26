@@ -6,10 +6,15 @@ interface MovieCardProps {
   loading: boolean
   movie: Movie
   key: number
+  size: {
+    width: number
+    height: number
+    total_with: number
+  }
 }
 
 const MovieCard = (payload: MovieCardProps) => {
-  const { loading, movie, key } = payload
+  const { loading, movie, key, size } = payload
 
   const configBadge: { text: string; color: string } = {
     color: movie.status === 'ongoing' ? 'green' : movie.status === 'completed' ? 'blue' : 'red',
@@ -59,21 +64,21 @@ const MovieCard = (payload: MovieCardProps) => {
                   backgroundColor: 'green',
                   borderRadius: 4,
                   bottom: 60,
-                  left: 22,
-                  fontSize: 20
+                  left: size.width === 200 ? 38 : 6,
+                  fontSize: 16
                 }}
               >
                 Phim Chiếu Rạp
               </span>
             )}
             {loading ? (
-              <Skeleton.Image active style={{ width: 200, height: 300 }} />
+              <Skeleton.Image active style={{ width: size.width, height: size.height }} />
             ) : (
               <img
                 style={{
                   objectFit: 'cover',
-                  width: 200,
-                  height: 300,
+                  width: size.width,
+                  height: size.height,
                   borderRadius: 4
                 }}
                 src={movie.thumb_url}
