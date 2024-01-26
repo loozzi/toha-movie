@@ -63,9 +63,10 @@ const MovieCard = (payload: MovieCardProps) => {
                   padding: '2px 8px',
                   backgroundColor: 'green',
                   borderRadius: 4,
-                  bottom: 60,
+                  top: size.width + (size.width === 200 ? 64 : 32),
                   left: size.width === 200 ? 38 : 6,
-                  fontSize: 16
+                  fontSize: 16,
+                  opacity: 0.9
                 }}
               >
                 Phim Chiếu Rạp

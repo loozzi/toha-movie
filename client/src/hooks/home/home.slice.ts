@@ -18,6 +18,10 @@ interface homeState {
     loading: boolean
     data: Movie[]
   }
+  theaters: {
+    loading: boolean
+    data: Movie[]
+  }
 }
 
 const initialState: homeState = {
@@ -36,6 +40,10 @@ const initialState: homeState = {
   tvShows: {
     loading: false,
     data: []
+  },
+  theaters: {
+    loading: false,
+    data: []
   }
 }
 
@@ -48,6 +56,7 @@ const homeSlice = createSlice({
       state.singles.loading = true
       state.cartoons.loading = true
       state.tvShows.loading = true
+      state.theaters.loading = true
     },
     fetchSeriesSuccess: (state, actions: PayloadAction<Movie[]>) => {
       state.series.loading = false
@@ -64,6 +73,10 @@ const homeSlice = createSlice({
     fetchTvShowsSuccess: (state, actions: PayloadAction<Movie[]>) => {
       state.tvShows.loading = false
       state.tvShows.data = actions.payload
+    },
+    fetchTheatersSuccess: (state, actions: PayloadAction<Movie[]>) => {
+      state.theaters.loading = false
+      state.theaters.data = actions.payload
     },
     fetchFailed: (state, actions: PayloadAction<string>) => {
       return {
@@ -85,6 +98,7 @@ export const selectSeries = (state: { home: homeState }) => state.home.series
 export const selectSingles = (state: { home: homeState }) => state.home.singles
 export const selectCartoons = (state: { home: homeState }) => state.home.cartoons
 export const selectTvShows = (state: { home: homeState }) => state.home.tvShows
+export const selectTheaters = (state: { home: homeState }) => state.home.theaters
 
 // Reducer
 const homeReducer = homeSlice.reducer

@@ -57,8 +57,27 @@ function* fetchLatestTvShows() {
   }
 }
 
+function* fetchLatestTheaters() {
+  const resp: IResponse<PaginationResponse<Movie>> = yield call(api.movie.getAll, {
+    limit: 10,
+    page: 1,
+    chieurap: 1
+  })
+  if (resp.status === 200) {
+    yield put(homeActions.fetchTheatersSuccess(resp.elements!.items))
+  } else {
+    yield put(homeActions.fetchFailed('theaters'))
+  }
+}
+
 function* fetchHomeData() {
-  yield all([call(fetchLatestSeries), call(fetchLatestSingles), call(fetchLatestCartoons), call(fetchLatestTvShows)])
+  yield all([
+    call(fetchLatestSeries),
+    call(fetchLatestSingles),
+    call(fetchLatestCartoons),
+    call(fetchLatestTvShows),
+    call(fetchLatestTheaters)
+  ])
 }
 
 export default function* homeSaga() {
