@@ -1,6 +1,6 @@
 import { CaretLeftOutlined, CaretRightOutlined } from '@ant-design/icons'
 import { Carousel, Divider } from 'antd'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Movie } from '~/models/movies'
 import MovieCard from './card'
 
@@ -10,21 +10,43 @@ interface MovieSliderProps {
   title: string
 }
 
+const SIZE_OF_MOVIE_CARD = 212
+
 const MovieSlider = (payload: MovieSliderProps) => {
   const { loading, movies, title } = payload
   const [itemPerSlide, setItemPerSlide] = useState<number>(5)
   const carouselRef = useRef<any>(null)
 
-  const handleSlide = (type: string) => {
-    if (type === 'prev') {
-      carouselRef.current.prev()
-    } else {
+  const handleSlide = (direction: 'next' | 'prev') => {
+    if (direction === 'next') {
       carouselRef.current.next()
+    } else {
+      carouselRef.current.prev()
     }
   }
 
+  const setWindowDimensions = () => {
+    const _itemPerSlide = Math.floor((Math.min(window.innerWidth, 1600) - 24) / SIZE_OF_MOVIE_CARD)
+    setItemPerSlide(_itemPerSlide)
+  }
+
+  useEffect(() => {
+    window.addEventListener('resize', setWindowDimensions)
+    return () => {
+      window.removeEventListener('resize', setWindowDimensions)
+    }
+  }, [])
+
   return (
-    <>
+    <div
+      style={{
+        padding: '0 16px',
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center'
+      }}
+    >
       <Divider
         orientation='left'
         plain
@@ -35,7 +57,12 @@ const MovieSlider = (payload: MovieSliderProps) => {
       >
         {title}
       </Divider>
-      <div style={{ maxWidth: itemPerSlide * 212, width: '100%', position: 'relative' }}>
+      <div
+        style={{
+          width: itemPerSlide * SIZE_OF_MOVIE_CARD,
+          position: 'relative'
+        }}
+      >
         <CaretRightOutlined
           style={{
             fontSize: 40,
@@ -60,15 +87,21 @@ const MovieSlider = (payload: MovieSliderProps) => {
           }}
           onClick={() => handleSlide('prev')}
         />
-        <Carousel dotPosition='top' ref={carouselRef} infinite autoplay slidesToShow={itemPerSlide}>
-          {movies.map((movie) => (
-            <div>
-              <MovieCard key={movie.id} loading={loading} movie={movie} />
-            </div>
-          ))}
-        </Carousel>
+        <div
+          style={{
+            width: '100%'
+          }}
+        >
+          <Carousel dotPosition='top' ref={carouselRef} infinite autoplay slidesToShow={itemPerSlide}>
+            {movies.map((movie) => (
+              <div>
+                <MovieCard key={movie.id} loading={loading} movie={movie} />
+              </div>
+            ))}
+          </Carousel>
+        </div>
       </div>
-    </>
+    </div>
   )
 }
 

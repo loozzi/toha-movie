@@ -12,7 +12,6 @@ const MovieCard = (payload: MovieCardProps) => {
   const { loading, movie, key } = payload
 
   const configBadge: { text: string; color: string } = {
-    // text: movie.status === 'ongoing' ? 'Đang Cập Nhật' : movie.status === 'completed' ? 'Hoàn Thành' : 'Sắp Chiếu',
     color: movie.status === 'ongoing' ? 'green' : movie.status === 'completed' ? 'blue' : 'red',
     text: movie.episode_current
   }
@@ -35,6 +34,7 @@ const MovieCard = (payload: MovieCardProps) => {
             opacity: 0.9
           }}
           text={movie.lang}
+          color='orange'
         >
           <Flex vertical style={{ position: 'relative' }}>
             <span
@@ -49,6 +49,21 @@ const MovieCard = (payload: MovieCardProps) => {
             >
               {movie.quality}
             </span>
+            {movie.chieurap === 1 && (
+              <span
+                style={{
+                  position: 'absolute',
+                  padding: '2px 8px',
+                  backgroundColor: 'green',
+                  borderRadius: 4,
+                  bottom: 60,
+                  left: 22,
+                  fontSize: 20
+                }}
+              >
+                Phim Chiếu Rạp
+              </span>
+            )}
             <img
               style={{
                 objectFit: 'cover',
