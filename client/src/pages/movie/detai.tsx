@@ -1,4 +1,4 @@
-import { Descriptions, Flex, Rate, Tag } from 'antd'
+import { Button, Descriptions, Divider, Flex, Rate, Tag } from 'antd'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import { Link } from 'react-router-dom'
@@ -7,6 +7,7 @@ import { selectIsAuthenticated } from '~/hooks/auth/auth.slice'
 import { MovieDetail } from '~/models/movies'
 import api from '~/services'
 import ActorsComp from './actors'
+import { PlayCircleOutlined } from '@ant-design/icons'
 
 const MovieDetailPage = () => {
   const { slug } = useParams()
@@ -63,17 +64,25 @@ const MovieDetailPage = () => {
           }}
         />
         <Flex>
-          <img
-            src={data?.thumb_url}
-            alt={data?.origin_name}
-            style={{
-              width: 300,
-              height: 450,
-              objectFit: 'cover',
-              borderRadius: 8,
-              boxShadow: '0 0 16px 4px rgba(255, 255, 255, 0.16)'
-            }}
-          />
+          <div>
+            <img
+              src={data?.thumb_url}
+              alt={data?.origin_name}
+              style={{
+                width: 300,
+                height: 450,
+                objectFit: 'cover',
+                borderRadius: 8,
+                boxShadow: '0 0 16px 4px rgba(255, 255, 255, 0.16)',
+                marginBottom: 16
+              }}
+            />
+            <Link to={'watch'}>
+              <Button type='primary' danger block icon={<PlayCircleOutlined />} size='large'>
+                XEM PHIM
+              </Button>
+            </Link>
+          </div>
           <div
             style={{
               marginLeft: 32
@@ -105,6 +114,9 @@ const MovieDetailPage = () => {
               <Descriptions.Item label='THỜI LƯỢNG'>{data?.time}</Descriptions.Item>
               <Descriptions.Item label='ĐÁNH GIÁ'>
                 <Rate disabled={!isAuthenticated} value={Math.round((data?.rate ?? 0) * 2) / 2} />
+              </Descriptions.Item>
+              <Descriptions.Item label='TRẠNG THÁI'>
+                {data?.episode_current} / {data?.episode_total}
               </Descriptions.Item>
               <Descriptions.Item label='QUỐC GIA'>
                 {data?.countries?.map((item) => (
@@ -140,9 +152,8 @@ const MovieDetailPage = () => {
                   </Link>
                 ))}
               </Descriptions.Item>
-              <Descriptions.Item label='KHỞI CHIẾU'>{data?.showtimes}</Descriptions.Item>
             </Descriptions>
-
+            <Divider orientation='left'>Giới thiệu</Divider>
             <div
               style={{
                 fontSize: 18
@@ -150,6 +161,16 @@ const MovieDetailPage = () => {
               dangerouslySetInnerHTML={{ __html: data?.content as string }}
             ></div>
             <ActorsComp actors={data?.actors} />
+            <Divider orientation='left'>Trailer</Divider>
+            <iframe
+              style={{
+                width: '100%',
+                height: '100%',
+                maxWidth: 800,
+                maxHeight: 450
+              }}
+              src={data?.trailer_url.replace('watch?v=', 'embed/')}
+            ></iframe>
           </div>
         </Flex>
       </div>
