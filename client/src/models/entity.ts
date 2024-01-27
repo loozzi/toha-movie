@@ -2,8 +2,8 @@ interface Entity {
   id: number
   name: string
   slug: string
-  count: number
-  modified: string
+  count?: number
+  modified?: string
 }
 
 export type Category = Entity

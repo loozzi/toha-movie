@@ -19,6 +19,7 @@ export default {
   country: 'quoc-gia/:slug',
   setting: 'cai-dat',
   search: 'tim-kiem',
+  year: 'nam/:year',
   home: '/',
   private: '/*',
   public: '/*',
