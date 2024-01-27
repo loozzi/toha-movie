@@ -6,6 +6,7 @@ import LoginPage from '~/pages/auth/login'
 import { ConfigProvider, theme } from 'antd'
 import RegisterPage from './pages/auth/register'
 import HomePage from './pages/home'
+import MovieDetailPage from './pages/movie/detai'
 
 function App() {
   const location = useLocation()
@@ -17,6 +18,7 @@ function App() {
           <Route path={''} element={<HomePage />} />
           <Route path={routesConfig.auth.login} element={<LoginPage />} />
           <Route path={routesConfig.auth.register} element={<RegisterPage />} />
+          <Route path={routesConfig.movie.detail} element={<MovieDetailPage />} />
         </Route>
       </Routes>
     </ConfigProvider>

@@ -13,12 +13,14 @@ export default {
     detail: 'phim/:slug',
     single: 'phim-le',
     series: 'phim-bo',
-    theater: 'phim-chieu-rap'
+    theater: 'phim-chieu-rap',
+    watch: 'phim/:slug/watch'
   },
   category: 'the-loai/:slug',
   country: 'quoc-gia/:slug',
   setting: 'cai-dat',
   search: 'tim-kiem',
+  year: 'nam/:year',
   home: '/',
   private: '/*',
   public: '/*',

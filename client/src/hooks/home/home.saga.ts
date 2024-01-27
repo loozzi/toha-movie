@@ -72,11 +72,11 @@ function* fetchLatestTheaters() {
 
 function* fetchHomeData() {
   yield all([
+    call(fetchLatestTheaters),
     call(fetchLatestSeries),
     call(fetchLatestSingles),
     call(fetchLatestCartoons),
-    call(fetchLatestTvShows),
-    call(fetchLatestTheaters)
+    call(fetchLatestTvShows)
   ])
 }
 
