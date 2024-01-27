@@ -2,19 +2,22 @@ import { Button, Descriptions, Divider, Flex, Rate, Skeleton, Tag } from 'antd'
 import { Fragment, useEffect, useState } from 'react'
 import { useParams } from 'react-router'
 import { Link } from 'react-router-dom'
-import { useAppSelector } from '~/app/hook'
+import { useAppDispatch, useAppSelector } from '~/app/hook'
 import { selectIsAuthenticated } from '~/hooks/auth/auth.slice'
 import { MovieDetail } from '~/models/movies'
 import api from '~/services'
 import ActorsComp from './actors'
 import { PlayCircleOutlined } from '@ant-design/icons'
 import { useMediaQuery } from 'react-responsive'
+import { movieActions, selectMovieDetail, selectMovieLoading } from '~/hooks/movie/movie.slice'
+import { string } from 'prop-types'
 
 const MovieDetailPage = () => {
   const { slug } = useParams()
 
-  const [loading, setLoading] = useState<boolean>(true)
-  const [data, setData] = useState<MovieDetail>()
+  const dispatch = useAppDispatch()
+  const loading = useAppSelector(selectMovieLoading)
+  const data = useAppSelector(selectMovieDetail)
 
   const isMobile = useMediaQuery({ query: '(max-width: 768px)' })
   const isTablet = useMediaQuery({ query: '(max-width: 1224px)' })
@@ -22,14 +25,16 @@ const MovieDetailPage = () => {
   const isAuthenticated = useAppSelector(selectIsAuthenticated)
 
   useEffect(() => {
-    setLoading(true)
-    api.movie.getDetail(slug as string).then((resp) => {
-      if (resp.status === 200) {
-        setData(resp.elements)
-      }
-      setLoading(false)
-    })
+    const payload: { slug: string } = {
+      slug: slug as string
+    }
+    dispatch(movieActions.fetchMovie(payload))
   }, [slug])
+
+  useEffect(() => {
+    console.log(data)
+  }, [data])
+
   return (
     <div
       style={{

@@ -6,7 +6,8 @@ import LoginPage from '~/pages/auth/login'
 import { ConfigProvider, theme } from 'antd'
 import RegisterPage from './pages/auth/register'
 import HomePage from './pages/home'
-import MovieDetailPage from './pages/movie/detai'
+import MovieDetailPage from './pages/movie/detail'
+import WatchMoviePage from './pages/movie/watch'
 
 function App() {
   const location = useLocation()
@@ -19,6 +20,7 @@ function App() {
           <Route path={routesConfig.auth.login} element={<LoginPage />} />
           <Route path={routesConfig.auth.register} element={<RegisterPage />} />
           <Route path={routesConfig.movie.detail} element={<MovieDetailPage />} />
+          <Route path={routesConfig.movie.watch} element={<WatchMoviePage />} />
         </Route>
       </Routes>
     </ConfigProvider>

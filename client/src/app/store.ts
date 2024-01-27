@@ -5,13 +5,15 @@ import rootSaga from './root.saga'
 import authReducer from '~/hooks/auth/auth.slice'
 import headerReducer from '~/hooks/header/header.slice'
 import homeReducer from '~/hooks/home/home.slice'
+import movieReducer from '~/hooks/movie/movie.slice'
 
 const sagaMiddleware = createSagaMiddleware()
 
 const rootReducer = combineReducers({
   auth: authReducer,
   header: headerReducer,
-  home: homeReducer
+  home: homeReducer,
+  movie: movieReducer
 })
 
 export const store = configureStore({
