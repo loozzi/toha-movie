@@ -8,12 +8,16 @@ import { MovieDetail } from '~/models/movies'
 import api from '~/services'
 import ActorsComp from './actors'
 import { PlayCircleOutlined } from '@ant-design/icons'
+import { useMediaQuery } from 'react-responsive'
 
 const MovieDetailPage = () => {
   const { slug } = useParams()
 
   const [loading, setLoading] = useState<boolean>(true)
   const [data, setData] = useState<MovieDetail>()
+
+  const isMobile = useMediaQuery({ query: '(max-width: 768px)' })
+  const isTablet = useMediaQuery({ query: '(max-width: 1224px)' })
 
   const isAuthenticated = useAppSelector(selectIsAuthenticated)
 
@@ -63,18 +67,19 @@ const MovieDetailPage = () => {
             height: 300
           }}
         />
-        <Flex>
-          <div>
+        <Flex vertical={isMobile}>
+          <Flex vertical>
             <img
               src={data?.thumb_url}
               alt={data?.origin_name}
               style={{
-                width: 300,
-                height: 450,
+                width: isTablet && !isMobile ? 200 : 300,
+                height: isTablet && !isMobile ? 300 : 450,
                 objectFit: 'cover',
                 borderRadius: 8,
                 boxShadow: '0 0 16px 4px rgba(255, 255, 255, 0.16)',
-                marginBottom: 16
+                marginBottom: 16,
+                alignSelf: 'center'
               }}
             />
             <Link to={'watch'}>
@@ -82,23 +87,23 @@ const MovieDetailPage = () => {
                 XEM PHIM
               </Button>
             </Link>
-          </div>
+          </Flex>
           <div
             style={{
-              marginLeft: 32
+              marginLeft: isMobile ? 0 : 32
             }}
           >
             <h1
               style={{
-                fontSize: 56
+                fontSize: isMobile ? 36 : 56
               }}
             >
               {data?.name}
             </h1>
             <div
               style={{
-                fontSize: 36,
-                marginBottom: 32
+                fontSize: isMobile ? 24 : 36,
+                marginBottom: isTablet && !isMobile ? 84 : 32
               }}
             >
               {data?.origin_name} (<Link to={`/nam/${data?.year}`}>{data?.year}</Link>)
@@ -109,7 +114,7 @@ const MovieDetailPage = () => {
                 marginBottom: 16
               }}
               layout='horizontal'
-              column={2}
+              column={isMobile ? 1 : 2}
             >
               <Descriptions.Item label='THỜI LƯỢNG'>{data?.time}</Descriptions.Item>
               <Descriptions.Item label='ĐÁNH GIÁ'>
