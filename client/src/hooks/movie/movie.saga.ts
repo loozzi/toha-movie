@@ -1,6 +1,6 @@
-import { call, fork, put, take, takeLatest } from 'redux-saga/effects'
+import { put, takeLatest } from 'redux-saga/effects'
 import { IResponse } from '~/models/IResponse'
-import { MovieDetail, MovieServer } from '~/models/movies'
+import { MovieDetail, MovieServerResponse } from '~/models/movies'
 import api from '~/services'
 import { movieActions } from './movie.slice'
 
@@ -19,10 +19,11 @@ function* fetchMovie(payload: any) {
 function* fetchEpisode(payload: any) {
   const { slug } = payload.payload
 
-  const resp: IResponse<MovieServer> = yield api.movie.getEpisodes(slug)
+  const resp: IResponse<MovieServerResponse> = yield api.movie.getEpisodes(slug)
 
   if (resp.status === 200) {
-    yield put(movieActions.fetchEpisodeSuccess(resp.elements!))
+    console.log(resp)
+    yield put(movieActions.fetchEpisodeSuccess(resp.elements!.items))
   } else {
     yield put(movieActions.fetchEpisodeFailed())
   }

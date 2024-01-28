@@ -3,8 +3,8 @@ import { MovieDetail, MovieServer } from '~/models/movies'
 
 interface MovieSliceState {
   loading: boolean
-  movie: MovieDetail | null
-  server: MovieServer | null
+  movie: MovieDetail | null | undefined
+  server: MovieServer[] | null | undefined
 }
 
 const initialState: MovieSliceState = {
@@ -21,7 +21,7 @@ const movieSlice = createSlice({
       state.loading = true
       state.movie = null
     },
-    fetchEpisode: (state, action: any) => {
+    fetchEpisode: (state, action: PayloadAction<{ slug: string }>) => {
       state.loading = true
       state.server = null
     },
@@ -29,15 +29,17 @@ const movieSlice = createSlice({
       state.loading = false
       state.movie = action.payload
     },
-    fetchEpisodeSuccess: (state, action: PayloadAction<MovieServer>) => {
+    fetchEpisodeSuccess: (state, action: PayloadAction<MovieServer[]>) => {
       state.loading = false
       state.server = action.payload
     },
     fetchMovieFailed: (state) => {
       state.loading = false
+      state.movie = undefined
     },
     fetchEpisodeFailed: (state) => {
       state.loading = false
+      state.server = undefined
     }
   }
 })

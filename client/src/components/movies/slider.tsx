@@ -30,8 +30,8 @@ const MovieSlider = (payload: MovieSliderProps) => {
     name: '',
     origin_name: '',
     slug: '',
-    type: '',
-    status: '',
+    type: 'single',
+    status: 'ongoing',
     year: 0,
     episode_current: '',
     quality: '',
@@ -135,13 +135,13 @@ const MovieSlider = (payload: MovieSliderProps) => {
           <Carousel dotPosition='top' ref={carouselRef} infinite autoplay slidesToShow={itemPerSlide}>
             {movies.length > 0
               ? movies.map((movie) => (
-                  <div>
+                  <div key={movie.id}>
                     <MovieCard size={SIZE_OF_MOVIE_CARD} key={movie.id} loading={loading} movie={movie} />
                   </div>
                 ))
               : [...Array(10)].map((_, index) => (
-                  <div>
-                    <MovieCard size={SIZE_OF_MOVIE_CARD} key={index} loading={loading} movie={emptyMovie} />
+                  <div key={index}>
+                    <MovieCard size={SIZE_OF_MOVIE_CARD} key={index} loading={true} movie={emptyMovie} />
                   </div>
                 ))}
           </Carousel>

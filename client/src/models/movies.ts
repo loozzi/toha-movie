@@ -47,3 +47,7 @@ export interface MovieServer {
   movie_id: number
   episodes: MovieEpisode[]
 }
+
+export interface MovieServerResponse {
+  items: MovieServer[]
+}
