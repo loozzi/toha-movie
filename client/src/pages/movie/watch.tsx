@@ -1,5 +1,6 @@
 import { Button, Result, Spin } from 'antd'
 import { useEffect, useState } from 'react'
+import { useMediaQuery } from 'react-responsive'
 import { useParams } from 'react-router'
 import { Link } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '~/app/hook'
@@ -14,6 +15,8 @@ const WatchMoviePage = () => {
   const movieDetail = useAppSelector(selectMovieDetail)
   const servers = useAppSelector(selectMovieServer)
   const dispatch = useAppDispatch()
+
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1224px)' })
 
   const { slug } = useParams()
 
@@ -63,6 +66,7 @@ const WatchMoviePage = () => {
           padding: 16
         }}
       >
+        {isTabletOrMobile && <div style={{ height: 64 }} />}
         {currentEpisode && currentEpisode.m3u8_url.length > 0 ? (
           <VideoPlayer thumb_url={movieDetail?.poster_url as string} current_time={300} url={currentEpisode.m3u8_url} />
         ) : currentEpisode && currentEpisode.video_url.length > 0 ? (
@@ -89,13 +93,17 @@ const WatchMoviePage = () => {
             marginTop: 16
           }}
         >
-          {movieDetail?.name}
+          <Link style={{ color: '#fff', textDecoration: 'none' }} to={'/phim/' + slug}>
+            {movieDetail?.name}
+          </Link>
         </h1>
         <h4>
-          {movieDetail?.origin_name} - {movieDetail?.year}
+          <Link style={{ color: '#fff', textDecoration: 'none' }} to={'/phim/' + slug}>
+            {movieDetail?.origin_name} - {movieDetail?.year}
+          </Link>
         </h4>
         <br />
-        <div dangerouslySetInnerHTML={{ __html: movieDetail?.content }}></div>
+        <div dangerouslySetInnerHTML={{ __html: movieDetail?.content as string }}></div>
 
         {servers.map((server) => (
           <ServerComp server={server} current_episode={currentEpisode} changeEpisode={changeEpisode} />
