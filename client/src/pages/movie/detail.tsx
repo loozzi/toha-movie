@@ -1,16 +1,13 @@
+import { PlayCircleOutlined } from '@ant-design/icons'
 import { Button, Descriptions, Divider, Flex, Rate, Skeleton, Tag } from 'antd'
-import { Fragment, useEffect, useState } from 'react'
+import { Fragment, useEffect } from 'react'
+import { useMediaQuery } from 'react-responsive'
 import { useParams } from 'react-router'
 import { Link } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '~/app/hook'
 import { selectIsAuthenticated } from '~/hooks/auth/auth.slice'
-import { MovieDetail } from '~/models/movies'
-import api from '~/services'
-import ActorsComp from './actors'
-import { PlayCircleOutlined } from '@ant-design/icons'
-import { useMediaQuery } from 'react-responsive'
 import { movieActions, selectMovieDetail, selectMovieLoading } from '~/hooks/movie/movie.slice'
-import { string } from 'prop-types'
+import ActorsComp from './actors'
 
 const MovieDetailPage = () => {
   const { slug } = useParams()
