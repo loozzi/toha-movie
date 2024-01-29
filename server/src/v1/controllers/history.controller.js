@@ -23,7 +23,7 @@ module.exports = {
 	create: async (req, res, next) => {
 		try {
 			const { id } = res.data
-			const { movie_id } = req.body
+			const { movie_id, server_id, episode_name } = req.body
 
 			if (!movie_id) {
 				return res.json({
@@ -34,7 +34,9 @@ module.exports = {
 
 			const resp = await historyService.create({
 				user_id: id,
-				movie_id
+				movie_id,
+				server_id,
+				episode_name
 			})
 			res.json(resp)
 		} catch (err) {

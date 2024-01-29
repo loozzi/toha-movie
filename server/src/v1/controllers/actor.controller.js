@@ -16,7 +16,7 @@ module.exports = {
 	},
 	create: async (req, res, next) => {
 		try {
-			const { name, slug } = req.body
+			const { name, slug, img_url } = req.body
 
 			if (!name || !slug) {
 				return res.json({
@@ -25,7 +25,7 @@ module.exports = {
 				})
 			}
 
-			const resp = await actorService.create({ name, slug })
+			const resp = await actorService.create({ name, slug, img_url })
 			res.json(resp)
 		} catch (err) {
 			res.json({
@@ -37,7 +37,7 @@ module.exports = {
 	},
 	update: async (req, res, next) => {
 		try {
-			const { id, name, slug } = req.body
+			const { id, name, slug, img_url } = req.body
 
 			if (!id || !name || !slug) {
 				return res.json({
@@ -46,7 +46,7 @@ module.exports = {
 				})
 			}
 
-			const resp = await actorService.update({ id, name, slug })
+			const resp = await actorService.update({ id, name, slug, img_url })
 			res.json(resp)
 		} catch (err) {
 			res.json({

@@ -21,8 +21,8 @@ const all = async ({ user_id, current_page, limit_page }) => {
 	}
 }
 
-const create = async ({ user_id, movie_id }) => {
-	const isCreated = await historyRepo.create({ user_id, movie_id })
+const create = async ({ user_id, movie_id, server_id, episode_name }) => {
+	const isCreated = await historyRepo.create({ user_id, movie_id, server_id, episode_name })
 
 	return {
 		status: isCreated ? 200 : 400,

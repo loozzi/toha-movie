@@ -8,7 +8,7 @@ const findByMovieId = async (movie_id) => {
 	]
 
 	const textQuery =
-		`select a.id, a.name, a.slug from actors a
+		`select a.id, a.name, a.slug, a.img_url from actors a
 		inner join movies_actors ma on ma.actor_id = a.id
 		where ${whereClauses.join(' and ')};`
 
@@ -19,9 +19,9 @@ const findOneBySlug = async (slug) => {
 	return (await query(`select * from actors where slug = '${slug}' and is_deleted = false`))[0]
 }
 
-const create = async ({ name, slug }) => {
+const create = async ({ name, slug, img_url }) => {
 	try {
-		await query(`insert into actors set ?`, { name, slug })
+		await query(`insert into actors set ?`, { name, slug, img_url })
 		return true
 	} catch (err) {
 		return false
@@ -68,9 +68,9 @@ const all = async ({ limit, offset }) => {
 	`)
 }
 
-const update = async ({ id, name, slug }) => {
+const update = async ({ id, name, slug, img_url }) => {
 	try {
-		await query(`update actors set ? where id = ${id}`, { name, slug })
+		await query(`update actors set ? where id = ${id}`, { name, slug, img_url })
 		return true
 	} catch (err) {
 		return false

@@ -346,3 +346,8 @@ create table if not exists histories(
 	foreign key (user_id) references users(id) on delete restrict on update cascade,
 	foreign key (movie_id) references movies(id) on delete restrict on update cascade
 );
+
+alter table histories add column server_id int not null default 0;
+alter table histories add column episode_name varchar(255) default '';
+
+alter table actors add column img_url varchar(255) default '';
