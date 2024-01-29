@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '~/app/hook'
 import { selectIsAuthenticated } from '~/hooks/auth/auth.slice'
 import { movieActions, selectMovieDetail, selectMovieLoading } from '~/hooks/movie/movie.slice'
-import ActorsComp from './actors'
+import ActorsComp from '~/components/movies/actors'
 
 const MovieDetailPage = () => {
   const { slug } = useParams()
