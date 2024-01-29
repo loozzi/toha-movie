@@ -20,7 +20,9 @@ client.interceptors.request.use(
       api.route.auth.login,
       api.route.auth.register,
       api.route.auth.refreshToken,
-      api.route.auth.resetPassword
+      api.route.auth.resetPassword,
+      api.route.movie.all,
+      api.route.movie.detail
     ]
     const flag = whiteList.some((item) => config.url?.includes(item))
 

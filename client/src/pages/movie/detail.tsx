@@ -193,7 +193,7 @@ const MovieDetailPage = () => {
                   <iframe
                     style={{
                       width: '100%',
-                      height: '100%',
+                      height: isTablet ? 400 : '100%',
                       maxWidth: 800,
                       maxHeight: 450
                     }}
