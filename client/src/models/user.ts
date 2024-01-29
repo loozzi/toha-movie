@@ -15,3 +15,14 @@ export interface AuthPayload {
 export interface RegisterPayload extends AuthPayload {
   username: string
 }
+
+export interface UserHistory {
+  user_id: number
+  movie_id: number
+  server_id: number
+  episode_name: string
+  cur_time: number
+  created: string
+  modified: string
+  is_deleted: number
+}

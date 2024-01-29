@@ -1,5 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { MovieDetail, MovieServer } from '~/models/movies'
+import { HistoryLocalStorage } from '~/pages/movie/watch'
 
 interface MovieSliceState {
   loading: boolean
@@ -40,6 +41,9 @@ const movieSlice = createSlice({
     fetchEpisodeFailed: (state) => {
       state.loading = false
       state.server = undefined
+    },
+    saveHistory: (state, action: PayloadAction<HistoryLocalStorage>) => {
+      state.loading = false
     }
   }
 })

@@ -3,6 +3,7 @@ import { IResponse } from '~/models/IResponse'
 import { MovieDetail, MovieServerResponse } from '~/models/movies'
 import api from '~/services'
 import { movieActions } from './movie.slice'
+import { HistoryLocalStorage } from '~/pages/movie/watch'
 
 function* fetchMovie(payload: any) {
   const { slug } = payload.payload
@@ -26,6 +27,18 @@ function* fetchEpisode(payload: any) {
     yield put(movieActions.fetchEpisodeSuccess(resp.elements!.items))
   } else {
     yield put(movieActions.fetchEpisodeFailed())
+  }
+}
+
+function* saveHistory(payload: any) {
+  const { movie_id, current_time, episode_name, server_id } = payload.payload as HistoryLocalStorage
+  if (movie_id) {
+    const resp: IResponse<undefined> = yield api.history.add({
+      movie_id,
+      current_time,
+      server_id,
+      episode_name
+    })
   }
 }
 

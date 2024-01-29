@@ -31,9 +31,16 @@ const movie = {
   rate: '/movie/rate'
 }
 
+const history = {
+  all: '/history/all',
+  add: '/history/create',
+  delete: '/history/delete'
+}
+
 export default {
   auth,
   category,
   country,
-  movie
+  movie,
+  history
 }

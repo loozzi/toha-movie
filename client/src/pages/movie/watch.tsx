@@ -13,6 +13,7 @@ export interface HistoryLocalStorage {
   current_time: number
   server_id: number
   episode_name: string
+  movie_id?: number
 }
 
 const WatchMoviePage = () => {
