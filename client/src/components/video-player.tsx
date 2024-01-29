@@ -5,7 +5,7 @@ interface VideoPlayerProps {
   url: string
   current_time: number
   thumb_url: string
-  saveHistory: (current_time: number) => void
+  saveHistory: (current_time: number, only_local: boolean) => void
 }
 
 const VideoPlayer = (props: VideoPlayerProps) => {
@@ -16,7 +16,12 @@ const VideoPlayer = (props: VideoPlayerProps) => {
 
   const onProgress = () => {
     const time = Math.round(videoRef.current.getCurrentTime())
-    if (time % 10 === 0) saveHistory(time)
+    if (time % 5 === 0) saveHistory(time, true)
+  }
+
+  const onSave = () => {
+    const time = Math.round(videoRef.current.getCurrentTime())
+    saveHistory(time, false)
   }
 
   const onReady = useCallback(() => {
@@ -50,8 +55,8 @@ const VideoPlayer = (props: VideoPlayerProps) => {
         maxHeight: 900
       }}
       onProgress={onProgress}
-      onPause={onProgress}
-      onSeek={onProgress}
+      onPause={onSave}
+      onSeek={onSave}
       onReady={onReady}
     />
   )

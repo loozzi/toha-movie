@@ -23,7 +23,6 @@ function* fetchEpisode(payload: any) {
   const resp: IResponse<MovieServerResponse> = yield api.movie.getEpisodes(slug)
 
   if (resp.status === 200) {
-    console.log(resp)
     yield put(movieActions.fetchEpisodeSuccess(resp.elements!.items))
   } else {
     yield put(movieActions.fetchEpisodeFailed())
@@ -33,7 +32,7 @@ function* fetchEpisode(payload: any) {
 function* saveHistory(payload: any) {
   const { movie_id, current_time, episode_name, server_id } = payload.payload as HistoryLocalStorage
   if (movie_id) {
-    const resp: IResponse<undefined> = yield api.history.add({
+    yield api.history.add({
       movie_id,
       current_time,
       server_id,
@@ -45,4 +44,5 @@ function* saveHistory(payload: any) {
 export default function* movieSaga() {
   yield takeLatest(movieActions.fetchMovie.type as any, fetchMovie)
   yield takeLatest(movieActions.fetchEpisode.type as any, fetchEpisode)
+  yield takeLatest(movieActions.saveHistory.type as any, saveHistory)
 }

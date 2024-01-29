@@ -29,7 +29,7 @@ const WatchMoviePage = () => {
   const [currentServerId, setCurrentServerId] = useState<number>(-1)
   const [currentTime, setCurrentTime] = useState<number>(0)
 
-  const saveHistory = (current_time: number) => {
+  const saveHistory = (current_time: number, only_local: boolean) => {
     const history = JSON.parse(localStorage.getItem('history') || '{}')
 
     history[movieDetail?.id as number] = {
@@ -39,12 +39,23 @@ const WatchMoviePage = () => {
     }
 
     localStorage.setItem('history', JSON.stringify(history))
+
+    if (!only_local || current_time % 60 === 0) {
+      dispatch(
+        movieActions.saveHistory({
+          movie_id: movieDetail?.id as number,
+          current_time: current_time,
+          server_id: currentServerId,
+          episode_name: currentEpisode?.file_name
+        })
+      )
+    }
   }
 
   const changeEpisode = (episode: MovieEpisode, server_id: number) => {
     setCurrentEpisode(episode)
     setCurrentServerId(server_id)
-    saveHistory(0)
+    saveHistory(0, false)
   }
 
   useEffect(() => {

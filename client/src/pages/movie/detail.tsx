@@ -28,10 +28,6 @@ const MovieDetailPage = () => {
     dispatch(movieActions.fetchMovie(payload))
   }, [slug])
 
-  useEffect(() => {
-    console.log(data)
-  }, [data])
-
   return (
     <div
       style={{
