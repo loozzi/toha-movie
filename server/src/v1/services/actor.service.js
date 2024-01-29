@@ -21,7 +21,7 @@ const all = async ({ current_page, limit_page }) => {
 	}
 }
 
-const create = async ({ name, slug }) => {
+const create = async ({ name, slug, img_url }) => {
 	if (await actorRepo.findOneBySlug(slug)) {
 		return {
 			status: 400,
@@ -29,7 +29,7 @@ const create = async ({ name, slug }) => {
 		}
 	}
 
-	if (await actorRepo.create({ name, slug })) {
+	if (await actorRepo.create({ name, slug, img_url })) {
 		return {
 			status: 200,
 			message: 'success'
@@ -42,7 +42,7 @@ const create = async ({ name, slug }) => {
 	}
 }
 
-const update = async ({ id, name, slug }) => {
+const update = async ({ id, name, slug, img_url }) => {
 	if (await actorRepo.findOneBySlug(slug)) {
 		return {
 			status: 400,
@@ -50,7 +50,7 @@ const update = async ({ id, name, slug }) => {
 		}
 	}
 
-	if (await actorRepo.update({ id, name, slug })) {
+	if (await actorRepo.update({ id, name, slug, img_url })) {
 		return {
 			status: 200,
 			message: 'success'
