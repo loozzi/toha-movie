@@ -1,20 +1,30 @@
-import { useEffect, useRef } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import ReactPlayer from 'react-player'
 
 interface VideoPlayerProps {
   url: string
   current_time: number
   thumb_url: string
+  saveHistory: (current_time: number) => void
 }
 
-const VideoPlayer = (payload: VideoPlayerProps) => {
-  const { url, current_time, thumb_url } = payload
+const VideoPlayer = (props: VideoPlayerProps) => {
+  const { url, current_time, thumb_url, saveHistory } = props
 
   const videoRef = useRef<any>(null)
+  const [isReady, setReady] = useState<boolean>(false)
 
-  useEffect(() => {
-    videoRef.current.seekTo(current_time, 'seconds')
-  }, [current_time])
+  const onProgress = () => {
+    const time = Math.round(videoRef.current.getCurrentTime())
+    if (time % 10 === 0) saveHistory(time)
+  }
+
+  const onReady = useCallback(() => {
+    if (!isReady) {
+      videoRef.current.seekTo(current_time, 'seconds')
+      setReady(true)
+    }
+  }, [isReady])
 
   return (
     <ReactPlayer
@@ -39,6 +49,10 @@ const VideoPlayer = (payload: VideoPlayerProps) => {
       style={{
         maxHeight: 900
       }}
+      onProgress={onProgress}
+      onPause={onProgress}
+      onSeek={onProgress}
+      onReady={onReady}
     />
   )
 }

@@ -9,9 +9,14 @@ import VideoPlayer from '~/components/video-player'
 import { movieActions, selectMovieDetail, selectMovieLoading, selectMovieServer } from '~/hooks/movie/movie.slice'
 import { MovieEpisode } from '~/models/movies'
 
+export interface HistoryLocalStorage {
+  current_time: number
+  server_id: number
+  episode_name: string
+}
+
 const WatchMoviePage = () => {
   const loading = useAppSelector(selectMovieLoading)
-  const [currentEpisode, setCurrentEpisode] = useState<MovieEpisode>(undefined as any as MovieEpisode)
   const movieDetail = useAppSelector(selectMovieDetail)
   const servers = useAppSelector(selectMovieServer)
   const dispatch = useAppDispatch()
@@ -19,19 +24,55 @@ const WatchMoviePage = () => {
   const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1224px)' })
 
   const { slug } = useParams()
+  const [currentEpisode, setCurrentEpisode] = useState<MovieEpisode>(undefined as any as MovieEpisode)
+  const [currentServerId, setCurrentServerId] = useState<number>(-1)
+  const [currentTime, setCurrentTime] = useState<number>(0)
+
+  const saveHistory = (current_time: number) => {
+    const history = JSON.parse(localStorage.getItem('history') || '{}')
+
+    history[movieDetail?.id as number] = {
+      current_time: current_time,
+      server_id: currentServerId,
+      episode_name: currentEpisode?.file_name
+    }
+
+    localStorage.setItem('history', JSON.stringify(history))
+  }
+
+  const changeEpisode = (episode: MovieEpisode, server_id: number) => {
+    setCurrentEpisode(episode)
+    setCurrentServerId(server_id)
+    saveHistory(0)
+  }
 
   useEffect(() => {
-    dispatch(movieActions.fetchEpisode({ slug: slug as string }))
     if (!movieDetail) dispatch(movieActions.fetchMovie({ slug: slug as string }))
+    dispatch(movieActions.fetchEpisode({ slug: slug as string }))
   }, [slug])
 
   useEffect(() => {
-    if (servers) setCurrentEpisode(servers[0].episodes[0])
-  }, [servers])
+    if (servers && movieDetail) {
+      const history = JSON.parse(localStorage.getItem('history') || '{}')
 
-  const changeEpisode = (episode: MovieEpisode) => {
-    setCurrentEpisode(episode)
-  }
+      if (Object.keys(history).includes((movieDetail?.id as number).toString())) {
+        const current: HistoryLocalStorage = history[movieDetail?.id as number]
+        const server = servers.find((s) => s.server_id == current.server_id)
+
+        if (server) {
+          setCurrentEpisode(server.episodes[0])
+          setCurrentServerId(server.server_id)
+          setCurrentTime(current.current_time)
+        } else {
+          setCurrentEpisode(servers[0].episodes[0])
+          setCurrentServerId(servers[0].server_id)
+        }
+      } else {
+        setCurrentEpisode(servers[0].episodes[0])
+        setCurrentServerId(servers[0].server_id)
+      }
+    }
+  }, [servers, movieDetail])
 
   if (servers === null || loading) {
     return (
@@ -68,7 +109,12 @@ const WatchMoviePage = () => {
       >
         {isTabletOrMobile && <div style={{ height: 64 }} />}
         {currentEpisode && currentEpisode.m3u8_url.length > 0 ? (
-          <VideoPlayer thumb_url={movieDetail?.poster_url as string} current_time={300} url={currentEpisode.m3u8_url} />
+          <VideoPlayer
+            thumb_url={movieDetail?.poster_url as string}
+            current_time={currentTime}
+            url={currentEpisode.m3u8_url}
+            saveHistory={saveHistory}
+          />
         ) : currentEpisode && currentEpisode.video_url.length > 0 ? (
           <div>
             <video controls autoPlay src={currentEpisode.video_url} style={{ width: '100%', height: '100%' }} />
@@ -106,7 +152,12 @@ const WatchMoviePage = () => {
         <div dangerouslySetInnerHTML={{ __html: movieDetail?.content as string }}></div>
 
         {servers.map((server) => (
-          <ServerComp server={server} current_episode={currentEpisode} changeEpisode={changeEpisode} />
+          <ServerComp
+            server={server}
+            current_episode={currentEpisode}
+            current_server_id={currentServerId}
+            changeEpisode={changeEpisode}
+          />
         ))}
       </div>
     )
