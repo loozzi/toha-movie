@@ -1,10 +1,10 @@
-import axios from 'axios'
-import { InternalAxiosRequestConfig } from 'axios'
+import { notification } from 'antd'
+import axios, { AxiosResponse, InternalAxiosRequestConfig } from 'axios'
 import { history } from '~/configs/history'
-import api from '.'
+import routesConfig from '~/configs/routes.config'
 import { IResponse } from '~/models/IResponse'
 import { Token } from '~/models/token'
-import routesConfig from '~/configs/routes.config'
+import api from '.'
 
 const client = axios.create({
   baseURL: 'http://localhost:8080/api/v1/',
@@ -20,7 +20,9 @@ client.interceptors.request.use(
       api.route.auth.login,
       api.route.auth.register,
       api.route.auth.refreshToken,
-      api.route.auth.resetPassword
+      api.route.auth.resetPassword,
+      api.route.movie.all,
+      api.route.movie.detail
     ]
     const flag = whiteList.some((item) => config.url?.includes(item))
 
@@ -57,8 +59,16 @@ client.interceptors.request.use(
 )
 
 client.interceptors.response.use(
-  function (response) {
-    return response.data
+  function (response: AxiosResponse<any>) {
+    const resp = response.data
+    if (resp.status === 401) {
+      notification.error({
+        message: 'Đăng nhập',
+        description: 'Phiên đăng nhập đã hết hạn'
+      })
+      history.push('/' + routesConfig.auth.login)
+    }
+    return resp
   },
   function (error) {
     return Promise.reject(error)

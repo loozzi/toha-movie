@@ -139,7 +139,6 @@ function* watchLoginFlow() {
         const { accessToken, refreshToken } = resp.elements!
         localStorage.setItem('access_token', accessToken)
         localStorage.setItem('refresh_token', refreshToken)
-        yield call(history.push, routesConfig.home)
         isLogin = true
       } else {
         isLogin = false

@@ -14,7 +14,7 @@ interface MovieCardProps {
 }
 
 const MovieCard = (payload: MovieCardProps) => {
-  const { loading, movie, key, size } = payload
+  const { loading, movie, size } = payload
 
   const configBadge: { text: string; color: string } = {
     color: movie.status === 'ongoing' ? 'green' : movie.status === 'completed' ? 'blue' : 'red',
@@ -22,7 +22,7 @@ const MovieCard = (payload: MovieCardProps) => {
   }
 
   return (
-    <Link to={`/phim/${movie.slug ? movie.slug : ''}`} key={key} style={{ color: 'white', paddingLeft: 8 }}>
+    <Link to={`/phim/${movie.slug ? movie.slug : ''}`} key={movie.id} style={{ color: 'white', paddingLeft: 8 }}>
       <Badge.Ribbon
         placement='end'
         style={{

@@ -33,3 +33,21 @@ export interface MovieDetail extends Movie {
   actors: Actor[]
   marked: boolean | null
 }
+
+export interface MovieEpisode {
+  file_name: string
+  file_slug: string
+  video_url: string
+  m3u8_url: string
+}
+
+export interface MovieServer {
+  server_id: number
+  server_name: string
+  movie_id: number
+  episodes: MovieEpisode[]
+}
+
+export interface MovieServerResponse {
+  items: MovieServer[]
+}

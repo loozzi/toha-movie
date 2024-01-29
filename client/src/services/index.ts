@@ -4,6 +4,7 @@ import authApi from './auth.api'
 import categoryApi from './category.api'
 import countryApi from './country.api'
 import movieApi from './movie.api'
+import historyApi from './history.api'
 
 export default {
   route: apiRoute,
@@ -11,5 +12,6 @@ export default {
   auth: authApi,
   category: categoryApi,
   country: countryApi,
-  movie: movieApi
+  movie: movieApi,
+  history: historyApi
 }
