@@ -1,6 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { AuthPayload, RegisterPayload, User } from '~/models/user'
-import api from '~/services'
 
 interface AuthState {
   isAuthenticated: boolean
@@ -37,8 +36,6 @@ const authSlice = createSlice({
       state.logging = false
       state.isAuthenticated = false
       state.user = undefined
-      api.token.removeAccessToken()
-      api.token.removeRefreshToken()
     }
   }
 })

@@ -74,6 +74,8 @@ function* handleLogout() {
       message: 'Đăng xuất',
       description: 'Đăng xuất thành công'
     })
+    api.token.removeAccessToken()
+    api.token.removeRefreshToken()
   } else {
     yield call(notification.error, {
       message: 'Đăng xuất',
