@@ -391,9 +391,21 @@ const rateMovie = async ({ movie_id, user_id, score }) => {
 		}
 	}
 
+	let userRate = await rateRepo.userRate({ movie_id: movie_id, user_id }) ?? 0
+
+	const rates = await rateRepo.findByMovieId(movie_id)
+	const total_rate = rates.length
+	const total_rate_score = rates.reduce((sum, rate) => sum + rate.rate, 0)
+	const rate_score = total_rate > 0 ? total_rate_score / total_rate : 0
+
 	return {
 		status: 200,
-		message: 'Rate movie successfully'
+		message: 'Rate movie successfully',
+		elements: {
+			total: total_rate,
+			score: rate_score,
+			user: userRate
+		}
 	}
 }
 

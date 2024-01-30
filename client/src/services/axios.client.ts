@@ -21,8 +21,7 @@ client.interceptors.request.use(
       api.route.auth.register,
       api.route.auth.refreshToken,
       api.route.auth.resetPassword,
-      api.route.movie.all,
-      api.route.movie.detail
+      api.route.movie.all
     ]
     const flag = whiteList.some((item) => config.url?.includes(item))
 
@@ -45,7 +44,9 @@ client.interceptors.request.use(
               access_token = accessToken
             }
           } else {
-            history.push(routesConfig.auth.login)
+            // Khong den luot client xu li authentication 😏😏😏
+            // history.push(routesConfig.auth.login)
+            return config
           }
         }
         config.headers.Authorization = `Bearer ${access_token}`
@@ -64,7 +65,7 @@ client.interceptors.request.use(
 client.interceptors.response.use(
   function (response: AxiosResponse<any>) {
     const resp = response.data
-    if (resp.status === 401) {
+    if (resp.message === 'Unauthorized') {
       notification.error({
         message: 'Đăng nhập',
         description: 'Phiên đăng nhập đã hết hạn'

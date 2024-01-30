@@ -4,13 +4,13 @@ import { MovieDetail, MovieServerResponse } from '~/models/movies'
 import api from '~/services'
 import { movieActions } from './movie.slice'
 import { HistoryLocalStorage } from '~/pages/movie/watch'
-import { RateRequest } from '~/models/rate'
+import { RateRequest, RateResponse } from '~/models/rate'
 import { notification } from 'antd'
 
 function* fetchMovie(payload: any) {
-  const { slug } = payload.payload
+  const { slug, user_id } = payload.payload
 
-  const resp: IResponse<MovieDetail> = yield api.movie.getDetail(slug)
+  const resp: IResponse<MovieDetail> = yield api.movie.getDetail({ slug, user_id })
 
   if (resp.status === 200) {
     yield put(movieActions.fetchMovieSuccess(resp.elements!))
@@ -45,8 +45,9 @@ function* saveHistory(payload: any) {
 
 function* rateMovie(payload: any) {
   const { movie_id, score } = payload.payload as RateRequest
-  const resp: IResponse<undefined> = yield api.movie.rate({ movie_id, score })
+  const resp: IResponse<RateResponse> = yield api.movie.rate({ movie_id, score })
   if (resp.status === 200) {
+    yield put(movieActions.rateMovieSuccess(resp.elements!))
     yield call(notification.success, {
       message: 'Đánh giá',
       description: 'Đánh giá phim thành công'

@@ -7,6 +7,7 @@ import { Link } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '~/app/hook'
 import ActorsComp from '~/components/movies/actors'
 import RateComp from '~/components/movies/rating'
+import { selectIsAuthenticated, selectUser } from '~/hooks/auth/auth.slice'
 import { movieActions, selectMovieDetail, selectMovieLoading } from '~/hooks/movie/movie.slice'
 
 const MovieDetailPage = () => {
@@ -15,16 +16,19 @@ const MovieDetailPage = () => {
   const dispatch = useAppDispatch()
   const loading = useAppSelector(selectMovieLoading)
   const data = useAppSelector(selectMovieDetail)
+  const user = useAppSelector(selectUser)
+  const isAuthenticated = useAppSelector(selectIsAuthenticated)
 
   const isMobile = useMediaQuery({ query: '(max-width: 768px)' })
   const isTablet = useMediaQuery({ query: '(max-width: 1224px)' })
 
   useEffect(() => {
-    const payload: { slug: string } = {
-      slug: slug as string
+    const payload: { slug: string; user_id?: number } = {
+      slug: slug as string,
+      user_id: user?.id
     }
     dispatch(movieActions.fetchMovie(payload))
-  }, [slug])
+  }, [slug, isAuthenticated])
 
   return (
     <div

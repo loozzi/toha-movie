@@ -11,9 +11,10 @@ const getAll = async (params: PaginationMovieParams): Promise<PaginationResponse
   })
 }
 
-const getDetail = async (slug: string): Promise<IResponse<MovieDetail>> => {
+const getDetail = async (props: { slug: string; user_id?: number }): Promise<IResponse<MovieDetail>> => {
+  const { slug, user_id } = props
   return await client.get(api.route.movie.detail, {
-    params: { slug }
+    params: { slug, user_id }
   })
 }
 
