@@ -1,9 +1,11 @@
-import { put, takeLatest } from 'redux-saga/effects'
+import { call, put, takeLatest } from 'redux-saga/effects'
 import { IResponse } from '~/models/IResponse'
 import { MovieDetail, MovieServerResponse } from '~/models/movies'
 import api from '~/services'
 import { movieActions } from './movie.slice'
 import { HistoryLocalStorage } from '~/pages/movie/watch'
+import { RateRequest } from '~/models/rate'
+import { notification } from 'antd'
 
 function* fetchMovie(payload: any) {
   const { slug } = payload.payload
@@ -41,8 +43,25 @@ function* saveHistory(payload: any) {
   }
 }
 
+function* rateMovie(payload: any) {
+  const { movie_id, score } = payload.payload as RateRequest
+  const resp: IResponse<undefined> = yield api.movie.rate({ movie_id, score })
+  if (resp.status === 200) {
+    yield call(notification.success, {
+      message: 'Đánh giá',
+      description: 'Đánh giá phim thành công'
+    })
+  } else {
+    yield call(notification.error, {
+      message: 'Đánh giá',
+      description: 'Đánh giá phim thất bại'
+    })
+  }
+}
+
 export default function* movieSaga() {
   yield takeLatest(movieActions.fetchMovie.type as any, fetchMovie)
   yield takeLatest(movieActions.fetchEpisode.type as any, fetchEpisode)
   yield takeLatest(movieActions.saveHistory.type as any, saveHistory)
+  yield takeLatest(movieActions.rateMovie.type as any, rateMovie)
 }

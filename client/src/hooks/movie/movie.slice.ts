@@ -1,5 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { MovieDetail, MovieServer } from '~/models/movies'
+import { RateRequest } from '~/models/rate'
 import { HistoryLocalStorage } from '~/pages/movie/watch'
 
 interface MovieSliceState {
@@ -43,6 +44,9 @@ const movieSlice = createSlice({
       state.server = undefined
     },
     saveHistory: (state, action: PayloadAction<HistoryLocalStorage>) => {
+      state.loading = false
+    },
+    rateMovie: (state, action: PayloadAction<RateRequest>) => {
       state.loading = false
     }
   }

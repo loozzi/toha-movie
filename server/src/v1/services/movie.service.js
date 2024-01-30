@@ -49,8 +49,10 @@ const getMovieDetail = async ({ slug, user_id }) => {
 	const directors = await directorRepo.findByMovieId(movie.id)
 	const actors = await actorRepo.findByMovieId(movie.id)
 	let marked = null
+	let userRate = null
 	if (!!user_id) {
 		marked = await userRepository.findOneMarkMovie({ movie_id: movie.id, user_id: user_id })
+		userRate = await rateRepo.userRate({ movie_id: movie.id, user_id }) ?? 0
 	}
 
 	const rates = await rateRepo.findByMovieId(movie.id)
@@ -68,12 +70,16 @@ const getMovieDetail = async ({ slug, user_id }) => {
 
 	const data = {
 		...movie,
-		rate: Math.round(rate_score * 10) / 10,
+		rate: {
+			total: total_rate,
+			score: rate_score,
+			user: userRate
+		},
+		marked: marked,
 		categories,
 		countries,
 		directors,
 		actors: uniqBy(actors, JSON.stringify),
-		marked: marked
 	}
 	return {
 		status: 200,
@@ -376,14 +382,7 @@ const deleteComment = async ({ comment_id, user_id }) => {
 }
 
 const rateMovie = async ({ movie_id, user_id, score }) => {
-	const isRated = await rateRepo.isRated({ movie_id, user_id })
-	let isCreated = false
-	if (isRated) {
-		isCreated = await rateRepo.update({ movie_id, user_id, score })
-	}
-	else {
-		isCreated = await rateRepo.create({ movie_id, user_id, score })
-	}
+	const isCreated = await rateRepo.create({ movie_id, user_id, score })
 
 	if (!isCreated) {
 		return {

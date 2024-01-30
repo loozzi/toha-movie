@@ -1,13 +1,13 @@
 import { PlayCircleOutlined } from '@ant-design/icons'
-import { Button, Descriptions, Divider, Flex, Rate, Skeleton, Tag } from 'antd'
+import { Button, Descriptions, Divider, Flex, Skeleton, Tag } from 'antd'
 import { Fragment, useEffect } from 'react'
 import { useMediaQuery } from 'react-responsive'
 import { useParams } from 'react-router'
 import { Link } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '~/app/hook'
-import { selectIsAuthenticated } from '~/hooks/auth/auth.slice'
-import { movieActions, selectMovieDetail, selectMovieLoading } from '~/hooks/movie/movie.slice'
 import ActorsComp from '~/components/movies/actors'
+import RateComp from '~/components/movies/rating'
+import { movieActions, selectMovieDetail, selectMovieLoading } from '~/hooks/movie/movie.slice'
 
 const MovieDetailPage = () => {
   const { slug } = useParams()
@@ -18,8 +18,6 @@ const MovieDetailPage = () => {
 
   const isMobile = useMediaQuery({ query: '(max-width: 768px)' })
   const isTablet = useMediaQuery({ query: '(max-width: 1224px)' })
-
-  const isAuthenticated = useAppSelector(selectIsAuthenticated)
 
   useEffect(() => {
     const payload: { slug: string } = {
@@ -134,7 +132,17 @@ const MovieDetailPage = () => {
             >
               <Descriptions.Item label='THỜI LƯỢNG'>{data?.time}</Descriptions.Item>
               <Descriptions.Item label='ĐÁNH GIÁ'>
-                <Rate disabled={!isAuthenticated} value={Math.round((data?.rate ?? 0) * 2) / 2} />
+                {data?.id && <RateComp value={data?.rate.user} movie_id={data?.id} />}
+                {data?.id && (
+                  <span
+                    style={{
+                      fontSize: 18,
+                      marginLeft: 8
+                    }}
+                  >
+                    {`${data.rate.score} / ${data.rate.total} lượt đánh giá`}
+                  </span>
+                )}
               </Descriptions.Item>
               <Descriptions.Item label='TRẠNG THÁI'>
                 {data && `${data?.episode_current} / ${data?.episode_total}`}
