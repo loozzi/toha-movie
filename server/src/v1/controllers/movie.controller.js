@@ -16,17 +16,17 @@ module.exports = {
 		}
 	},
 	getMovieDetail: async (req, res, next) => {
-		// try {
-		const { slug, user_id } = req.query
-		const resp = await movieService.getMovieDetail({ slug, user_id })
-		res.json(resp)
-		// } catch (err) {
-		// 	res.json({
-		// 		status: 500,
-		// 		message: 'Internal Server Error',
-		// 		error: err
-		// 	})
-		// }
+		try {
+			const { slug, user_id } = req.query
+			const resp = await movieService.getMovieDetail({ slug, user_id })
+			res.json(resp)
+		} catch (err) {
+			res.json({
+				status: 500,
+				message: 'Internal Server Error',
+				error: err
+			})
+		}
 	},
 	getEpisodes: async (req, res, next) => {
 		try {
@@ -224,30 +224,30 @@ module.exports = {
 		}
 	},
 	rateMovie: async (req, res, next) => {
-		// try {
-		const { movie_id, score } = req.body
-		const { id } = res.data
-		if (!movie_id || !score) {
-			return res.json({
-				status: 400,
-				message: 'Require fields are missing'
+		try {
+			const { movie_id, score } = req.body
+			const { id } = res.data
+			if (!movie_id || !score) {
+				return res.json({
+					status: 400,
+					message: 'Require fields are missing'
+				})
+			}
+
+			let _scrore = parseInt(score)
+			_scrore = Math.min(_scrore, 10)
+			_scrore = Math.max(_scrore, 0)
+
+			const resp = await movieService.rateMovie({ movie_id, user_id: id, score: _scrore })
+			res.json(resp)
+
+		} catch (err) {
+			console.log(err)
+			res.json({
+				status: 500,
+				message: 'Internal Server Error',
+				error: err
 			})
 		}
-
-		let _scrore = parseInt(score)
-		_scrore = Math.min(_scrore, 10)
-		_scrore = Math.max(_scrore, 0)
-
-		const resp = await movieService.rateMovie({ movie_id, user_id: id, score: _scrore })
-		res.json(resp)
-
-		// } catch (err) {
-		// 	console.log(err)
-		// 	res.json({
-		// 		status: 500,
-		// 		message: 'Internal Server Error',
-		// 		error: err
-		// 	})
-		// }
 	}
 }

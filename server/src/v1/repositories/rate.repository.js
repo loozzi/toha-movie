@@ -8,20 +8,34 @@ const findByMovieId = async (movie_id) => {
 	}
 }
 
-const create = async ({ movie_id, user_id, score }) => {
-	try {
-		query(`insert into rates set ?`, { movie_id, user_id, rate: score })
-	} catch (err) {
-		return false
-	}
-}
-
 const update = async ({ movie_id, user_id, score }) => {
 	try {
 		query(`update rates set ? where movie_id = ${movie_id} and user_id = ${user_id}`, { rate: score })
 		return true
 	}
 	catch (err) {
+		return false
+	}
+}
+
+const userRate = async ({ movie_id, user_id }) => {
+	try {
+		const value = (await query(`select rate from rates where movie_id = ${movie_id} and user_id = ${user_id}`))[0].rate
+		console.log(value)
+		return value
+	} catch (err) {
+		return null
+	}
+}
+
+const create = async ({ movie_id, user_id, score }) => {
+	try {
+		const status = await userRate({ movie_id, user_id })
+		if (status !== null)
+			return await update({ movie_id, user_id, score })
+		else await query(`insert into rates set ?`, { movie_id, user_id, rate: score })
+		return true
+	} catch (err) {
 		return false
 	}
 }
@@ -35,16 +49,10 @@ const remove = async ({ movie_id, user_id }) => {
 	}
 }
 
-const isRated = async ({ movie_id, user_id }) => {
-	const rates = await query(`select * from rates where movie_id = ${movie_id} and user_id = ${user_id}`)
-	return rates.length > 0
-
-}
-
 module.exports = {
 	create,
 	update,
 	delete: remove,
 	findByMovieId,
-	isRated
+	userRate
 }

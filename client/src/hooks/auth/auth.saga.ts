@@ -29,8 +29,10 @@ function* handleLogin(payload: AuthPayload) {
         description: 'Đăng nhập thành công. Chào mừng trở lại'
       })
       const { accessToken, refreshToken } = resp.elements!
-      localStorage.setItem('access_token', accessToken)
-      localStorage.setItem('refresh_token', refreshToken)
+      // localStorage.setItem('access_token', accessToken)
+      api.token.setAccessToken(accessToken)
+      // localStorage.setItem('refresh_token', refreshToken)
+      api.token.setRefreshToken(refreshToken)
       yield call(history.push, routesConfig.home)
     } else if (resp.status === 401) {
       yield put(authActions.loginFailed())
@@ -72,6 +74,8 @@ function* handleLogout() {
       message: 'Đăng xuất',
       description: 'Đăng xuất thành công'
     })
+    api.token.removeAccessToken()
+    api.token.removeRefreshToken()
   } else {
     yield call(notification.error, {
       message: 'Đăng xuất',
@@ -99,8 +103,10 @@ function* handleRegister(payload: RegisterPayload) {
         description: 'Đăng ký thành công'
       })
       const { accessToken, refreshToken } = resp.elements!.user
-      localStorage.setItem('access_token', accessToken)
-      localStorage.setItem('refresh_token', refreshToken)
+      // localStorage.setItem('access_token', accessToken)
+      api.token.setAccessToken(accessToken)
+      // localStorage.setItem('refresh_token', refreshToken)
+      api.token.setRefreshToken(refreshToken)
       yield call(history.push, routesConfig.auth.verify)
     } else if (resp.status === 400) {
       yield put(authActions.loginFailed())
@@ -122,7 +128,8 @@ function* handleRegister(payload: RegisterPayload) {
 
 function* watchLoginFlow() {
   while (true) {
-    const refreshToken = localStorage.getItem('refresh_token')
+    // const refreshToken = localStorage.getItem('refresh_token')
+    const refreshToken = api.token.getRefreshToken()
     let isLogin = false
     if (!!refreshToken) {
       const fetch: Promise<IResponse<Token>> = api.token
@@ -137,8 +144,10 @@ function* watchLoginFlow() {
       if (resp.status === 200) {
         yield put(authActions.loginSuccess(resp.elements!.user))
         const { accessToken, refreshToken } = resp.elements!
-        localStorage.setItem('access_token', accessToken)
-        localStorage.setItem('refresh_token', refreshToken)
+        // localStorage.setItem('access_token', accessToken)
+        api.token.setAccessToken(accessToken)
+        // localStorage.setItem('refresh_token', refreshToken)
+        api.token.setRefreshToken(refreshToken)
         isLogin = true
       } else {
         isLogin = false

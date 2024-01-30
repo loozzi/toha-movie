@@ -1,4 +1,5 @@
 import { Actor, Category, Country, Director } from './entity'
+import { RateResponse } from './rate'
 
 export interface Movie {
   id: number
@@ -25,7 +26,7 @@ export interface MovieDetail extends Movie {
   time: string
   episode_total: string
   poster_url: string
-  rate: number
+  rate: RateResponse
   showtimes: string
   categories: Category[]
   countries: Country[]

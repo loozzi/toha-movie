@@ -23,7 +23,7 @@ module.exports = {
 	create: async (req, res, next) => {
 		try {
 			const { id } = res.data
-			const { movie_id, server_id, episode_name } = req.body
+			const { movie_id, server_id, episode_name, current_time } = req.body
 
 			if (!movie_id) {
 				return res.json({
@@ -36,7 +36,8 @@ module.exports = {
 				user_id: id,
 				movie_id,
 				server_id,
-				episode_name
+				episode_name,
+				current_time
 			})
 			res.json(resp)
 		} catch (err) {

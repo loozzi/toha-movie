@@ -25,10 +25,10 @@ const findOne = async ({ user_id, movie_id }) => {
 	return histories.length > 0 ? histories[0] : null
 }
 
-const update = async ({ user_id, movie_id, server_id, cur_time, episode_name }) => {
+const update = async ({ user_id, movie_id, server_id, current_time, episode_name }) => {
 	await query(
 		`UPDATE histories SET modified = now(), 
-			cur_time = ${cur_time}, 
+			cur_time = ${current_time}, 
 			episode_name = '${episode_name}', 
 			server_id = ${server_id},
 			is_deleted = FALSE
@@ -36,16 +36,16 @@ const update = async ({ user_id, movie_id, server_id, cur_time, episode_name }) 
 	)
 }
 
-const create = async ({ user_id, movie_id, server_id, episode_name }) => {
+const create = async ({ user_id, movie_id, server_id, episode_name, current_time }) => {
 	try {
 		const isCreated = await findOne({ user_id, movie_id })
 		if (isCreated) {
-			await update({ user_id, movie_id })
+			await update({ user_id, movie_id, server_id, episode_name, current_time })
 			return true
 		}
 		await query(
 			`INSERT INTO histories (user_id, movie_id, cur_time, server_id, episode_name) 
-			VALUES (${user_id}, ${movie_id}, 0, ${server_id}, '${episode_name}', ${episode_name})`
+			VALUES (${user_id}, ${movie_id}, 0, ${server_id}, '${episode_name}')`
 		)
 		return true
 	} catch (err) {

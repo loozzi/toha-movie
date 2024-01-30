@@ -1,5 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { MovieDetail, MovieServer } from '~/models/movies'
+import { RateRequest, RateResponse } from '~/models/rate'
 import { HistoryLocalStorage } from '~/pages/movie/watch'
 
 interface MovieSliceState {
@@ -18,7 +19,7 @@ const movieSlice = createSlice({
   name: 'movie',
   initialState: initialState,
   reducers: {
-    fetchMovie: (state, action: PayloadAction<{ slug: string }>) => {
+    fetchMovie: (state, action: PayloadAction<{ slug: string; user_id?: number }>) => {
       state.loading = true
       state.movie = null
     },
@@ -44,6 +45,16 @@ const movieSlice = createSlice({
     },
     saveHistory: (state, action: PayloadAction<HistoryLocalStorage>) => {
       state.loading = false
+    },
+    rateMovie: (state, action: PayloadAction<RateRequest>) => {
+      state.loading = false
+    },
+    rateMovieSuccess: (state, action: PayloadAction<RateResponse>) => {
+      state.loading = false
+      state.movie = {
+        ...(state.movie as MovieDetail),
+        rate: action.payload
+      }
     }
   }
 })
