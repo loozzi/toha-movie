@@ -28,7 +28,8 @@ client.interceptors.request.use(
 
     if (!flag) {
       try {
-        let access_token = localStorage.getItem('access_token')
+        // let access_token = localStorage.getItem('access_token')
+        let access_token = api.token.getAccessToken()
         if (!access_token) {
           const refresh_token = localStorage.getItem('refresh_token')
           if (refresh_token) {
@@ -37,8 +38,10 @@ client.interceptors.request.use(
               const { accessToken, refreshToken }: Token = elements as Token
               if (!accessToken || !refreshToken) history.push(routesConfig.auth.login)
 
-              localStorage.setItem('access_token', accessToken)
-              localStorage.setItem('refresh_token', refreshToken)
+              // localStorage.setItem('access_token', accessToken)
+              api.token.setAccessToken(accessToken)
+              // localStorage.setItem('refresh_token', refreshToken)
+              api.token.setRefreshToken(refreshToken)
               access_token = accessToken
             }
           } else {
@@ -67,6 +70,8 @@ client.interceptors.response.use(
         description: 'Phiên đăng nhập đã hết hạn'
       })
       history.push('/' + routesConfig.auth.login)
+      api.token.removeAccessToken()
+      api.token.removeRefreshToken()
     }
     return resp
   },
