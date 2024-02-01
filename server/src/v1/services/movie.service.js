@@ -332,6 +332,35 @@ const rateMovie = async ({ movie_id, user_id, score }) => {
 	}
 }
 
+const getMoviesForHome = async () => {
+	// find 10 movies order by modified
+	const theaters = await movieRepo.all({ chieurap: 1, limit: 10, offset: 0 })
+	const series = await movieRepo.all({ type: 'series', limit: 10, offset: 0 })
+	const singles = await movieRepo.all({ type: 'single', limit: 10, offset: 0 })
+	const cartoons = await movieRepo.all({ type: 'hoathinh', limit: 10, offset: 0 })
+	const tvshows = await movieRepo.all({ type: 'tvshows', limit: 10, offset: 0 })
+
+	return {
+		status: 200,
+		message: 'Get movies for home successfully',
+		elements: {
+			theaters,
+			series,
+			singles,
+			cartoons,
+			tvshows
+		}
+	}
+}
+
+const getMoviesForSuggest = async ({ movie_id }) => {
+	return {
+		status: 200,
+		message: 'Get movies for suggest successfully',
+		elements: []
+	}
+}
+
 module.exports = {
 	getMovies,
 	getMovieDetail,
@@ -339,5 +368,7 @@ module.exports = {
 	addMovie,
 	updateMovie,
 	deleteMovie,
-	rateMovie
+	rateMovie,
+	getMoviesForHome,
+	getMoviesForSuggest
 }

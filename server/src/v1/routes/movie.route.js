@@ -9,6 +9,14 @@ const midderware = require('../utils/middleware.service')
 // Get all movies order by modified 
 router.get('/all', pagination.midderware, movieController.getMovies)
 
+// GET /api/v1/movie/home
+// Get movies for home page
+router.get('/home', movieController.getMoviesForHome)
+
+// GET /api/v1/movie/suggest
+// Get movies for suggest
+router.get('/suggest', movieController.getMoviesForSuggest)
+
 // GET /api/v1/movie/detail
 // Get movie detail by slug
 router.get('/detail', movieController.getMovieDetail)

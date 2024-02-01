@@ -169,5 +169,32 @@ module.exports = {
 				error: err
 			})
 		}
+	},
+	getMoviesForHome: async (req, res, next) => {
+		try {
+			const resp = await movieService.getMoviesForHome()
+			res.json(resp)
+		} catch (err) {
+			console.log(err)
+			res.json({
+				status: 500,
+				message: 'Internal Server Error',
+				error: err
+			})
+		}
+	},
+	getMoviesForSuggest: async (req, res, next) => {
+		try {
+			const { movie_id } = req.query
+			const resp = await movieService.getMoviesForSuggest(movie_id)
+			res.json(resp)
+		} catch (err) {
+			console.log(err)
+			res.json({
+				status: 500,
+				message: 'Internal Server Error',
+				error: err
+			})
+		}
 	}
 }

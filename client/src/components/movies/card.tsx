@@ -84,6 +84,7 @@ const MovieCard = (payload: MovieCardProps) => {
                 }}
                 src={movie.thumb_url}
                 alt={movie.name}
+                loading='lazy'
               />
             )}
 
