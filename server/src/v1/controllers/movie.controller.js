@@ -3,9 +3,9 @@ const movieService = require('../services/movie.service')
 module.exports = {
 	getMovies: async (req, res, next) => {
 		try {
-			const { category_id, country_id, year, type, status, chieurap } = req.query
+			const { category_id, country_id, year, type, status, chieurap, keyword } = req.query
 			const { current_page, limit_page } = res.pagination
-			const resp = await movieService.getMovies({ current_page, limit_page, category_id, country_id, year, type, status, chieurap })
+			const resp = await movieService.getMovies({ current_page, limit_page, category_id, country_id, year, type, status, chieurap, keyword })
 			res.json(resp)
 		} catch (err) {
 			res.json({

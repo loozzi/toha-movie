@@ -9,8 +9,16 @@ const rateRepo = require('../repositories/rate.repository')
 const userRepository = require('../repositories/user.repository')
 
 
-const getMovies = async ({ current_page, limit_page, category_id, country_id, year, type, status, chieurap }) => {
-	const total_item = await movieRepo.count()
+const getMovies = async ({ current_page, limit_page, category_id, country_id, year, type, status, chieurap, keyword }) => {
+	const total_item = await movieRepo.count({
+		category_id,
+		country_id,
+		year,
+		type,
+		status,
+		chieurap,
+		keyword
+	})
 
 	const offset = (current_page - 1) * limit_page
 	const data = await movieRepo.all({
@@ -21,7 +29,8 @@ const getMovies = async ({ current_page, limit_page, category_id, country_id, ye
 		year,
 		type,
 		status,
-		chieurap
+		chieurap,
+		keyword
 	})
 
 	return {

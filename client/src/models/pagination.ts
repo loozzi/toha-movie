@@ -24,7 +24,7 @@ export interface PaginationMovieParams extends PaginationParams {
   country_id?: number
   status?: MovieStatus
   year?: number
-  category?: number
+  category_id?: number
   type?: MovieType
   chieurap?: 0 | 1 | undefined
   keyword?: string

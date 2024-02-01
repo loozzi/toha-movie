@@ -25,7 +25,7 @@ const SearchPage = () => {
       country_id: country_id,
       status: _status ? (_status as MovieStatus) : ('' as MovieStatus),
       year: _year ? parseInt(_year) : undefined,
-      category: category_id,
+      category_id: category_id,
       type: _type ? (_type as MovieType) : ('' as MovieType),
       keyword: _keyword ?? undefined
     }
