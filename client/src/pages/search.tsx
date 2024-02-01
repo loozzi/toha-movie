@@ -17,6 +17,7 @@ const SearchPage = () => {
     const _type = searchData.get('loai')
     const _status = searchData.get('trang-thai')
     const _keyword = searchData.get('tu-khoa')
+    const _theater = searchData.get('chieu-rap')
 
     const country_id = country ? country.find((e) => e.slug === _country)?.id : undefined
     const category_id = category ? category.find((e) => e.slug === _category)?.id : undefined
@@ -27,7 +28,8 @@ const SearchPage = () => {
       year: _year ? parseInt(_year) : undefined,
       category_id: category_id,
       type: _type ? (_type as MovieType) : ('' as MovieType),
-      keyword: _keyword ?? undefined
+      keyword: _keyword ?? undefined,
+      chieurap: _theater ? (parseInt(_theater) as 0 | 1) : undefined
     }
     if (category && country) {
     }
