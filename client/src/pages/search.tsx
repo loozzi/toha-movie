@@ -1,6 +1,7 @@
 import { Divider, Spin } from 'antd'
 import Search from 'antd/es/input/Search'
 import { useEffect, useState } from 'react'
+import { useMediaQuery } from 'react-responsive'
 import { useSearchParams } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '~/app/hook'
 import FilterComp from '~/components/search/filter'
@@ -18,6 +19,8 @@ const SearchPage = () => {
   const country = useAppSelector(selectCountries)
   const searchResult = useAppSelector(selectSearchResult)
   const dispatch = useAppDispatch()
+
+  const isTabletOrMobile = useMediaQuery({ query: '(max-width: 1224px)' })
 
   const onSearch = (value: string) => {
     console.log(value)
@@ -60,7 +63,7 @@ const SearchPage = () => {
     <div
       style={{
         margin: 'auto',
-        marginTop: 16,
+        marginTop: isTabletOrMobile ? 80 : 16,
         maxWidth: 1600,
         width: '100%'
       }}

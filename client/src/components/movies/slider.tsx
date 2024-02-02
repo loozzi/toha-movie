@@ -66,9 +66,9 @@ const MovieSlider = (payload: MovieSliderProps) => {
 
   useEffect(() => {
     if (isTabletOrMobile) {
-      SIZE_OF_MOVIE_CARD.total_with = 150
-      SIZE_OF_MOVIE_CARD.width = 140
-      SIZE_OF_MOVIE_CARD.height = 210
+      SIZE_OF_MOVIE_CARD.total_with = 192
+      SIZE_OF_MOVIE_CARD.width = 180
+      SIZE_OF_MOVIE_CARD.height = 300
     } else {
       SIZE_OF_MOVIE_CARD.total_with = 212
       SIZE_OF_MOVIE_CARD.width = 200

@@ -1,10 +1,10 @@
-import { Divider, Flex, Pagination, PaginationProps, Space } from 'antd'
-import { Movie } from '~/models/movies'
-import { PaginationR } from '~/models/pagination'
-import MovieCard from '../movies/card'
+import { Flex, Pagination, PaginationProps, Space } from 'antd'
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import slug from '~/configs/slug'
+import { Movie } from '~/models/movies'
+import { PaginationR } from '~/models/pagination'
+import MovieCard from '../movies/card'
 
 interface ListMovieCompProps {
   loading: boolean
@@ -15,8 +15,8 @@ interface ListMovieCompProps {
 const ListMovieComp = (props: ListMovieCompProps) => {
   const [searchParams, setSearchParams] = useSearchParams()
   const { pagination, loading, data } = props
-  const [limit, setLimit] = useState<number>(20)
-  const [page, setPage] = useState<number>(1)
+  const [limit, setLimit] = useState<number>(pagination?.count ?? 20)
+  const [page, setPage] = useState<number>(pagination?.current_page ?? 1)
 
   const handlePageChange: PaginationProps['onChange'] = (page: number, size: number) => {
     setPage(page)

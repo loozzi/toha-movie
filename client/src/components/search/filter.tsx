@@ -1,5 +1,5 @@
 import { ClockCircleOutlined, FlagOutlined, MinusCircleOutlined, MinusOutlined } from '@ant-design/icons'
-import { Divider, MenuProps, Space } from 'antd'
+import { MenuProps, Space } from 'antd'
 import { useAppSelector } from '~/app/hook'
 import slug from '~/configs/slug'
 import { selectCategories, selectCountries } from '~/hooks/header/header.slice'
@@ -58,7 +58,7 @@ const FilterComp = () => {
   ]
 
   return (
-    <Space style={{ margin: '16px 0', width: '100%' }}>
+    <Space style={{ margin: '16px 0', width: '100%', display: 'flex', justifyContent: 'center' }} wrap>
       <DropdownFilterComp label='Loại phim' items={typeItems} queryKey={slug.key.type} />
       <DropdownFilterComp label='Thể loại' items={categoryItems} queryKey={slug.key.category} />
       <DropdownFilterComp label='Quốc gia' items={countryItems} queryKey={slug.key.country} />

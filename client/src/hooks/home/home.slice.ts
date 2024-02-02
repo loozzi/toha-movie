@@ -1,6 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { Movie } from '~/models/movies'
-import { PaginationMovieParams, PaginationParams, PaginationResponse } from '~/models/pagination'
+import { PaginationMovieParams, PaginationResponse } from '~/models/pagination'
 
 interface homeState {
   series: {
