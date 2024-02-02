@@ -1,5 +1,6 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { Movie } from '~/models/movies'
+import { PaginationMovieParams, PaginationResponse } from '~/models/pagination'
 
 interface homeState {
   series: {
@@ -21,6 +22,10 @@ interface homeState {
   theaters: {
     loading: boolean
     data: Movie[]
+  }
+  search: {
+    loading: boolean
+    data: PaginationResponse<Movie> | undefined
   }
 }
 
@@ -44,6 +49,10 @@ const initialState: homeState = {
   theaters: {
     loading: false,
     data: []
+  },
+  search: {
+    loading: false,
+    data: undefined
   }
 }
 
@@ -86,6 +95,17 @@ const homeSlice = createSlice({
           data: []
         }
       }
+    },
+    search: (state, actions: PayloadAction<PaginationMovieParams>) => {
+      state.search.loading = true
+    },
+    searchSuccess: (state, actions: PayloadAction<PaginationResponse<Movie>>) => {
+      state.search.loading = false
+      state.search.data = actions.payload
+    },
+    searchFailed: (state) => {
+      state.search.loading = false
+      state.search.data = undefined
     }
   }
 })
@@ -99,6 +119,7 @@ export const selectSingles = (state: { home: homeState }) => state.home.singles
 export const selectCartoons = (state: { home: homeState }) => state.home.cartoons
 export const selectTvShows = (state: { home: homeState }) => state.home.tvShows
 export const selectTheaters = (state: { home: homeState }) => state.home.theaters
+export const selectSearchResult = (state: { home: homeState }) => state.home.search
 
 // Reducer
 const homeReducer = homeSlice.reducer

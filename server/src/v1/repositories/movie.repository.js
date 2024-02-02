@@ -35,11 +35,39 @@ const findLastModifed = async () => {
 	return (await query(`select * from movies order by modified desc limit 1;`))[0]
 }
 
-const count = async () => {
-	return (await query(`select count(*) as total from movies where is_deleted = false`))[0].total
+const count = async ({
+	category_id,
+	country_id,
+	year,
+	type,
+	status,
+	chieurap,
+	keyword
+}) => {
+	const whereClauses = [
+		`m.is_deleted = false`,
+		`mc.is_deleted = false`,
+		`mct.is_deleted = false`,
+		category_id ? `m.id in (select movie_id from movies_categories where category_id = ${category_id})` : '',
+		country_id ? `m.id in (select movie_id from movies_countries where country_id = ${country_id})` : '',
+		year ? `m.year = ${year}` : '',
+		type ? `m.type = '${type}'` : '',
+		status ? `m.status = '${status}'` : '',
+		chieurap ? `m.chieurap = '${chieurap}'` : '',
+		keyword ? `(m.name like '%${keyword}%' or m.origin_name like '%${keyword}%')` : ''
+	]
+
+	const textQuery = `
+		select count(distinct m.id) as total from movies m
+		inner join movies_categories mc on m.id = mc.movie_id
+		inner join movies_countries mct on m.id = mct.movie_id
+		where ${whereClauses.filter(e => e.length).join(' and ')}`
+
+
+	return (await query(textQuery))[0].total
 }
 
-const all = async ({ limit, offset, category_id, country_id, year, type, status, order_by, chieurap }) => {
+const all = async ({ limit, offset, category_id, country_id, year, type, status, order_by, chieurap, keyword }) => {
 	const whereClauses = [
 		`m.is_deleted = false`,
 		`mc.is_deleted = false`,
@@ -48,10 +76,11 @@ const all = async ({ limit, offset, category_id, country_id, year, type, status,
 		`ct.is_deleted = false`,
 		category_id ? `m.id in (select movie_id from movies_categories where category_id = ${category_id})` : '',
 		country_id ? `m.id in (select movie_id from movies_countries where country_id = ${country_id})` : '',
-		year ? `year = ${year}` : '',
-		type ? `type = '${type}'` : '',
-		status ? `status = '${status}'` : '',
-		chieurap ? `chieurap = '${chieurap}'` : ''
+		year ? `m.year = ${year}` : '',
+		type ? `m.type = '${type}'` : '',
+		status ? `m.status = '${status}'` : '',
+		chieurap ? `m.chieurap = '${chieurap}'` : '',
+		keyword ? `(m.name like '%${keyword}%' or m.origin_name like '%${keyword}%')` : ''
 	]
 
 	const textQuery =

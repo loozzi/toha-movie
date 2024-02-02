@@ -52,3 +52,11 @@ export interface MovieServer {
 export interface MovieServerResponse {
   items: MovieServer[]
 }
+
+export interface MovieHomePage {
+  series: Movie[]
+  singles: Movie[]
+  cartoons: Movie[]
+  tvshows: Movie[]
+  theaters: Movie[]
+}

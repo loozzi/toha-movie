@@ -1,3 +1,5 @@
+import slug from './slug'
+
 export default {
   auth: {
     login: 'auth/login',
@@ -9,15 +11,12 @@ export default {
     resetPassword: 'auth/reset-password'
   },
   movie: {
-    hot: 'phim-hot',
-    detail: 'phim/:slug',
-    single: 'phim-le',
-    series: 'phim-bo',
-    theater: 'phim-chieu-rap',
-    watch: 'phim/:slug/watch'
+    detail: `${slug.key.movie}/:slug`,
+    single: `${slug.key.search}?${slug.key.type}=${slug.value.type.singles}`,
+    series: `${slug.key.search}?${slug.key.type}=${slug.value.type.series}`,
+    theater: `${slug.key.search}?${slug.key.theater}=${slug.value.theaters.yes}`,
+    watch: `${slug.key.movie}/:slug/watch`
   },
-  category: 'the-loai/:slug',
-  country: 'quoc-gia/:slug',
   setting: 'cai-dat',
   search: 'tim-kiem',
   year: 'nam/:year',

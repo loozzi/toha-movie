@@ -9,6 +9,7 @@ import HomePage from './pages/home'
 import MovieDetailPage from './pages/movie/detail'
 import WatchMoviePage from './pages/movie/watch'
 import LogoutPage from './pages/logout'
+import SearchPage from './pages/search'
 
 function App() {
   const location = useLocation()
@@ -23,6 +24,7 @@ function App() {
           <Route path={routesConfig.auth.logout} element={<LogoutPage />} />
           <Route path={routesConfig.movie.detail} element={<MovieDetailPage />} />
           <Route path={routesConfig.movie.watch} element={<WatchMoviePage />} />
+          <Route path={routesConfig.search} element={<SearchPage />} />
         </Route>
       </Routes>
     </ConfigProvider>

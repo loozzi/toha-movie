@@ -3,9 +3,9 @@ const movieService = require('../services/movie.service')
 module.exports = {
 	getMovies: async (req, res, next) => {
 		try {
-			const { category_id, country_id, year, type, status, chieurap } = req.query
+			const { category_id, country_id, year, type, status, chieurap, keyword } = req.query
 			const { current_page, limit_page } = res.pagination
-			const resp = await movieService.getMovies({ current_page, limit_page, category_id, country_id, year, type, status, chieurap })
+			const resp = await movieService.getMovies({ current_page, limit_page, category_id, country_id, year, type, status, chieurap, keyword })
 			res.json(resp)
 		} catch (err) {
 			res.json({
@@ -143,86 +143,6 @@ module.exports = {
 			})
 		}
 	},
-	getComments: async (req, res, next) => {
-		try {
-			const { current_page, limit_page } = res.pagination
-			const { slug, movie_id, user_id } = req.query
-
-			const resp = await movieService.getComments({ current_page, limit_page, slug, movie_id, user_id })
-			res.json(resp)
-		} catch (err) {
-			res.json({
-				status: 500,
-				message: 'Internal Server Error',
-				error: err
-			})
-		}
-	},
-	addComment: async (req, res, next) => {
-		try {
-			const { movie_id, content } = req.body
-			const { id } = res.data
-			if (!movie_id || !content) {
-				return res.json({
-					status: 400,
-					message: 'Require fields are missing'
-				})
-			}
-
-			const resp = await movieService.addComment({ movie_id, user_id: id, content })
-
-			res.json(resp)
-		} catch (err) {
-			res.json({
-				status: 500,
-				message: 'Internal Server Error',
-				error: err
-			})
-		}
-	},
-	updateComment: async (req, res, next) => {
-		try {
-			const { comment_id, content } = req.body
-			const { id } = res.data
-			if (!comment_id || !content) {
-				return res.json({
-					status: 400,
-					message: 'Require fields are missing'
-				})
-			}
-
-			const resp = await movieService.updateComment({ comment_id, user_id: id, content })
-			res.json(resp)
-
-		} catch (err) {
-			res.json({
-				status: 500,
-				message: 'Internal Server Error',
-				error: err
-			})
-		}
-	},
-	deleteComment: async (req, res, next) => {
-		try {
-			const { comment_id } = req.query
-			const { id } = res.data
-			if (!comment_id) {
-				return res.json({
-					status: 400,
-					message: 'Require fields are missing'
-				})
-			}
-
-			const resp = await movieService.deleteComment({ comment_id, user_id: id })
-			res.json(resp)
-		} catch (err) {
-			res.json({
-				status: 500,
-				message: 'Internal Server Error',
-				error: err
-			})
-		}
-	},
 	rateMovie: async (req, res, next) => {
 		try {
 			const { movie_id, score } = req.body
@@ -241,6 +161,33 @@ module.exports = {
 			const resp = await movieService.rateMovie({ movie_id, user_id: id, score: _scrore })
 			res.json(resp)
 
+		} catch (err) {
+			console.log(err)
+			res.json({
+				status: 500,
+				message: 'Internal Server Error',
+				error: err
+			})
+		}
+	},
+	getMoviesForHome: async (req, res, next) => {
+		try {
+			const resp = await movieService.getMoviesForHome()
+			res.json(resp)
+		} catch (err) {
+			console.log(err)
+			res.json({
+				status: 500,
+				message: 'Internal Server Error',
+				error: err
+			})
+		}
+	},
+	getMoviesForSuggest: async (req, res, next) => {
+		try {
+			const { movie_id } = req.query
+			const resp = await movieService.getMoviesForSuggest(movie_id)
+			res.json(resp)
 		} catch (err) {
 			console.log(err)
 			res.json({

@@ -1,4 +1,4 @@
-export interface Pagination {
+export interface PaginationR {
   current_page: number
   total_page: number
   total_item: number
@@ -7,7 +7,7 @@ export interface Pagination {
 
 export interface PaginationResponse<T> {
   items: T[]
-  pagination: Pagination
+  pagination: PaginationR
 }
 
 export interface PaginationParams {
@@ -17,11 +17,15 @@ export interface PaginationParams {
   [key: string]: any
 }
 
+export type MovieStatus = 'completed' | 'ongoing' | 'trailer' | ''
+export type MovieType = 'single' | 'series' | 'hoathinh' | 'tvshows' | ''
+
 export interface PaginationMovieParams extends PaginationParams {
   country_id?: number
-  status?: 'completed' | 'ongoing' | 'trailer' | ''
+  status?: MovieStatus
   year?: number
-  category?: number
-  type?: 'single' | 'series' | 'hoathinh' | 'tvshows' | ''
+  category_id?: number
+  type?: MovieType
   chieurap?: 0 | 1 | undefined
+  keyword?: string
 }

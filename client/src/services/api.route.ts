@@ -23,6 +23,8 @@ const country = {
 
 const movie = {
   all: '/movie/all',
+  home: '/movie/home',
+  suggest: '/movie/suggest',
   detail: '/movie/detail',
   episodes: '/movie/episodes',
   add: '/movie/add',

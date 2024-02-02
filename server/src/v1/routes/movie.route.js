@@ -1,12 +1,21 @@
 const router = require('express').Router()
 
 const movieController = require('../controllers/movie.controller')
+const commentController = require('../controllers/comment.controlelr')
 const pagination = require('../utils/pagination.service')
 const midderware = require('../utils/middleware.service')
 
 // GET /api/v1/movie
 // Get all movies order by modified 
 router.get('/all', pagination.midderware, movieController.getMovies)
+
+// GET /api/v1/movie/home
+// Get movies for home page
+router.get('/home', movieController.getMoviesForHome)
+
+// GET /api/v1/movie/suggest
+// Get movies for suggest
+router.get('/suggest', movieController.getMoviesForSuggest)
 
 // GET /api/v1/movie/detail
 // Get movie detail by slug
@@ -18,19 +27,19 @@ router.get('/episodes', midderware.isLoggingIn, midderware.isMember, movieContro
 
 // GET /api/v1/movie/comment
 // Get comments by slug
-router.get('/comment', pagination.midderware, movieController.getComments)
+router.get('/comment', pagination.midderware, commentController.getComments)
 
 // POST /api/v1/movie/comment
 // Add comment to movie
-router.post('/comment', midderware.isLoggingIn, midderware.isMember, movieController.addComment)
+router.post('/comment', midderware.isLoggingIn, midderware.isMember, commentController.addComment)
 
 // PUT /api/v1/movie/comment
 // Update comment to movie
-router.put('/comment', midderware.isLoggingIn, midderware.isMember, movieController.updateComment)
+router.put('/comment', midderware.isLoggingIn, midderware.isMember, commentController.updateComment)
 
 // DELETE /api/v1/movie/comment
 // Delete comment to movie
-router.delete('/comment', midderware.isLoggingIn, midderware.isMember, movieController.deleteComment)
+router.delete('/comment', midderware.isLoggingIn, midderware.isMember, commentController.deleteComment)
 
 // POST /api/v1/movie/rate
 // Rate movie

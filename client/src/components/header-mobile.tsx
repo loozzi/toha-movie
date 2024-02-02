@@ -18,6 +18,7 @@ import { Link } from 'react-router-dom'
 import { useAppDispatch, useAppSelector } from '~/app/hook'
 import logo from '~/assets/imgs/logo.png'
 import routesConfig from '~/configs/routes.config'
+import slug from '~/configs/slug'
 import { selectIsAuthenticated } from '~/hooks/auth/auth.slice'
 import { headerActions, selectCategories, selectCountries } from '~/hooks/header/header.slice'
 
@@ -36,12 +37,12 @@ const HeaderMobileComp = () => {
 
   const SubMenuCategories = categories.map((category) => (
     <Menu.Item key={category.slug} style={{ flex: '1 0 45%' }}>
-      <Link to={`/the-loai/${category.slug}`}>{category.name}</Link>
+      <Link to={`${slug.key.search}?${slug.key.category}=${category.slug}`}>{category.name}</Link>
     </Menu.Item>
   ))
   const SubMenuCountries = countries.map((country) => (
     <Menu.Item key={country.slug} style={{ flex: '1 0 30%' }}>
-      <Link to={`/quoc-gia/${country.slug}`}>{country.name}</Link>
+      <Link to={`/${slug.key.search}?${slug.key.country}=${country.slug}`}>{country.name}</Link>
     </Menu.Item>
   ))
 
