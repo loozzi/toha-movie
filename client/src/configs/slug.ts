@@ -8,7 +8,9 @@ export default {
     keywords: 'tu-khoa',
     theater: 'chieu-rap',
     type: 'loai',
-    search: 'tim-kiem'
+    search: 'tim-kiem',
+    page: 'trang',
+    limit: 'limit'
   },
   value: {
     type: {

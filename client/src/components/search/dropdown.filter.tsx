@@ -36,6 +36,11 @@ const DropdownFilterComp = (props: DropdownFilterCompProps) => {
 
   useEffect(() => {
     setItems([{ key: 'all', label: 'Tất cả', value: '', icon: <PlusSquareOutlined /> } as any, ...(items ?? [])])
+    const _selected = searchParams.get(queryKey)
+    if (_selected) {
+      const itemSelected: any = (items ?? []).find((item: any) => item.value == _selected)
+      setSelected(itemSelected?.label)
+    }
   }, [items])
 
   return (

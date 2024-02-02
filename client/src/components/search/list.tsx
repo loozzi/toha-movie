@@ -1,7 +1,10 @@
-import { Divider, Flex, Pagination, Space } from 'antd'
+import { Divider, Flex, Pagination, PaginationProps, Space } from 'antd'
 import { Movie } from '~/models/movies'
 import { PaginationR } from '~/models/pagination'
 import MovieCard from '../movies/card'
+import { useEffect, useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
+import slug from '~/configs/slug'
 
 interface ListMovieCompProps {
   loading: boolean
@@ -10,8 +13,21 @@ interface ListMovieCompProps {
 }
 
 const ListMovieComp = (props: ListMovieCompProps) => {
+  const [searchParams, setSearchParams] = useSearchParams()
   const { pagination, loading, data } = props
-  console.log(pagination, loading, data)
+  const [limit, setLimit] = useState<number>(20)
+  const [page, setPage] = useState<number>(1)
+
+  const handlePageChange: PaginationProps['onChange'] = (page: number, size: number) => {
+    setPage(page)
+    setLimit(size)
+  }
+
+  useEffect(() => {
+    searchParams.set(slug.key.page, page.toString())
+    searchParams.set(slug.key.limit, limit.toString())
+    setSearchParams(searchParams)
+  }, [page, limit])
 
   return (
     <Flex vertical align='center'>
@@ -19,7 +35,7 @@ const ListMovieComp = (props: ListMovieCompProps) => {
         direction='horizontal'
         size={[8, 16]}
         wrap
-        style={{ width: '100%', maxWidth: 1600, display: 'flex', justifyContent: 'center' }}
+        style={{ width: '100%', maxWidth: 1600, display: 'flex', justifyContent: 'center', marginBottom: 32 }}
       >
         {data.map((e: Movie) => (
           <div key={e.id} style={{ height: 400, width: 192 }}>
@@ -42,7 +58,11 @@ const ListMovieComp = (props: ListMovieCompProps) => {
         responsive
         total={pagination?.total_item}
         pageSize={pagination?.count}
+        pageSizeOptions={[20, 40, 60, 80, 100]}
+        defaultPageSize={limit}
+        onShowSizeChange={(current, size) => setLimit(size)}
         current={pagination?.current_page}
+        onChange={handlePageChange}
       />
     </Flex>
   )

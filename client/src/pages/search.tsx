@@ -32,6 +32,8 @@ const SearchPage = () => {
       const _type = searchParams.get(slug.key.type)
       const _status = searchParams.get(slug.key.status)
       const _theater = searchParams.get(slug.key.theater)
+      const _page = searchParams.get(slug.key.page)
+      const _limit = searchParams.get(slug.key.limit)
 
       const country_id = country ? country.find((e) => e.slug === _country)?.id : undefined
       const category_id = category ? category.find((e) => e.slug === _category)?.id : undefined
@@ -43,7 +45,9 @@ const SearchPage = () => {
         category_id: category_id,
         type: _type ? (_type as MovieType) : ('' as MovieType),
         keyword: keyword ?? undefined,
-        chieurap: _theater ? (parseInt(_theater) as 0 | 1) : undefined
+        chieurap: _theater ? (parseInt(_theater) as 0 | 1) : undefined,
+        page: _page ? parseInt(_page) : 1,
+        limit: _limit ? parseInt(_limit) : 20
       }
       if (category && country) {
         dispatch(homeActions.search(params))
@@ -70,7 +74,15 @@ const SearchPage = () => {
         onChange={(e) => onSearch(e.target.value)}
       />
       <FilterComp />
-      <Divider orientation='left'>Kết quả</Divider>
+      <Divider orientation='left'>
+        {searchResult.loading ? (
+          <Spin />
+        ) : searchResult.data ? (
+          `Tìm thấy ${searchResult.data.pagination.total_item} Kết quả`
+        ) : (
+          ''
+        )}
+      </Divider>
       {searchResult.loading && <Spin />}
       {searchResult.data != undefined && (
         <ListMovieComp
