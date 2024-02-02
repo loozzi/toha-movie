@@ -1,6 +1,7 @@
 import { all, call, put, takeLatest } from 'redux-saga/effects'
 import { IResponse } from '~/models/IResponse'
-import { MovieHomePage } from '~/models/movies'
+import { Movie, MovieHomePage } from '~/models/movies'
+import { PaginationResponse } from '~/models/pagination'
 import api from '~/services'
 import { homeActions } from './home.slice'
 
@@ -23,6 +24,17 @@ function* fetchHomeData() {
   }
 }
 
+function* fetchSearchData({ payload }: ReturnType<typeof homeActions.search>) {
+  const searchData: IResponse<PaginationResponse<Movie>> = yield call(api.movie.getAll, payload)
+  if (searchData.status === 200) {
+    console.log(searchData.elements!)
+    yield put(homeActions.searchSuccess(searchData.elements!))
+  } else {
+    yield put(homeActions.searchFailed())
+  }
+}
+
 export default function* homeSaga() {
   yield takeLatest(homeActions.fetchData.type, fetchHomeData)
+  yield takeLatest(homeActions.search.type, fetchSearchData)
 }

@@ -1,4 +1,4 @@
-export interface Pagination {
+export interface PaginationR {
   current_page: number
   total_page: number
   total_item: number
@@ -7,7 +7,7 @@ export interface Pagination {
 
 export interface PaginationResponse<T> {
   items: T[]
-  pagination: Pagination
+  pagination: PaginationR
 }
 
 export interface PaginationParams {

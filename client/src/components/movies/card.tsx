@@ -22,7 +22,11 @@ const MovieCard = (payload: MovieCardProps) => {
   }
 
   return (
-    <Link to={`/phim/${movie.slug ? movie.slug : ''}`} key={movie.id} style={{ color: 'white', paddingLeft: 8 }}>
+    <Link
+      to={`/phim/${movie.slug ? movie.slug : ''}`}
+      key={movie.id}
+      style={{ color: 'white', paddingLeft: 8, width: size.total_with }}
+    >
       <Badge.Ribbon
         placement='end'
         style={{

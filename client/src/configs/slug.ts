@@ -20,6 +20,11 @@ export default {
     theaters: {
       yes: '1',
       no: '0'
+    },
+    status: {
+      coming: 'trailer',
+      running: 'ongoing',
+      ended: 'completed'
     }
   }
 }

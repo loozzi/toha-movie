@@ -1,41 +1,86 @@
-import { useEffect } from 'react'
+import { Divider, Spin } from 'antd'
+import Search from 'antd/es/input/Search'
+import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { useAppSelector } from '~/app/hook'
+import { useAppDispatch, useAppSelector } from '~/app/hook'
+import FilterComp from '~/components/search/filter'
+import ListMovieComp from '~/components/search/list'
+import slug from '~/configs/slug'
 import { selectCategories, selectCountries } from '~/hooks/header/header.slice'
+import { homeActions, selectSearchResult } from '~/hooks/home/home.slice'
 import { MovieStatus, MovieType, PaginationMovieParams } from '~/models/pagination'
 
 const SearchPage = () => {
-  const [searchData, setSearchData] = useSearchParams()
+  const [searchParams] = useSearchParams()
+  const [keyword, setKeyword] = useState<string | undefined>(searchParams.get('tu-khoa') ?? '')
 
   const category = useAppSelector(selectCategories)
   const country = useAppSelector(selectCountries)
+  const searchResult = useAppSelector(selectSearchResult)
+  const dispatch = useAppDispatch()
+
+  const onSearch = (value: string) => {
+    console.log(value)
+    setKeyword(value)
+  }
 
   useEffect(() => {
-    const _category = searchData.get('the-loai')
-    const _country = searchData.get('quoc-gia')
-    const _year = searchData.get('nam')
-    const _type = searchData.get('loai')
-    const _status = searchData.get('trang-thai')
-    const _keyword = searchData.get('tu-khoa')
-    const _theater = searchData.get('chieu-rap')
+    const delayDebounceFn = setTimeout(() => {
+      const _category = searchParams.get(slug.key.category)
+      const _country = searchParams.get(slug.key.country)
+      const _year = searchParams.get(slug.key.year)
+      const _type = searchParams.get(slug.key.type)
+      const _status = searchParams.get(slug.key.status)
+      const _theater = searchParams.get(slug.key.theater)
 
-    const country_id = country ? country.find((e) => e.slug === _country)?.id : undefined
-    const category_id = category ? category.find((e) => e.slug === _category)?.id : undefined
+      const country_id = country ? country.find((e) => e.slug === _country)?.id : undefined
+      const category_id = category ? category.find((e) => e.slug === _category)?.id : undefined
 
-    const params: PaginationMovieParams = {
-      country_id: country_id,
-      status: _status ? (_status as MovieStatus) : ('' as MovieStatus),
-      year: _year ? parseInt(_year) : undefined,
-      category_id: category_id,
-      type: _type ? (_type as MovieType) : ('' as MovieType),
-      keyword: _keyword ?? undefined,
-      chieurap: _theater ? (parseInt(_theater) as 0 | 1) : undefined
-    }
-    if (category && country) {
-    }
-  }, [searchData, category, country])
+      const params: PaginationMovieParams = {
+        country_id: country_id,
+        status: _status ? (_status as MovieStatus) : ('' as MovieStatus),
+        year: _year ? parseInt(_year) : undefined,
+        category_id: category_id,
+        type: _type ? (_type as MovieType) : ('' as MovieType),
+        keyword: keyword ?? undefined,
+        chieurap: _theater ? (parseInt(_theater) as 0 | 1) : undefined
+      }
+      if (category && country) {
+        dispatch(homeActions.search(params))
+      }
+    }, 300)
+    return () => clearTimeout(delayDebounceFn)
+  }, [searchParams, category, country, keyword])
 
-  return <div>SearchPage</div>
+  return (
+    <div
+      style={{
+        margin: 'auto',
+        marginTop: 16,
+        maxWidth: 1600,
+        width: '100%'
+      }}
+    >
+      <Search
+        placeholder='Nhập tên phim...'
+        allowClear
+        enterButton='Search'
+        size='large'
+        onSearch={onSearch}
+        onChange={(e) => onSearch(e.target.value)}
+      />
+      <FilterComp />
+      <Divider orientation='left'>Kết quả</Divider>
+      {searchResult.loading && <Spin />}
+      {searchResult.data != undefined && (
+        <ListMovieComp
+          pagination={searchResult.data.pagination}
+          data={searchResult.data.items}
+          loading={searchResult.loading}
+        />
+      )}
+    </div>
+  )
 }
 
 export default SearchPage

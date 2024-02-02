@@ -97,7 +97,6 @@ const all = async ({ limit, offset, category_id, country_id, year, type, status,
 		group by m.id
 		order by m.modified ${order_by ? order_by : 'desc'}
 		limit ${limit} offset ${offset}`
-	console.log(textQuery)
 	return await query(textQuery)
 }
 
